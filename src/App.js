@@ -1,6 +1,11 @@
 import React, {useState,useEffect} from 'react';
 import './App.css';
 
+/* 
+NOTE TO SELF:
+for simplicity we will use one pic for each weather type and not differentiate between light rain and heavy rain for now. CHANGE THIS IF WE HAVE TIME.
+*/
+
 function App() {
   // getting current date in unix format
   const currentDateUnix = Math.floor(new Date()/1000);
@@ -25,6 +30,10 @@ function App() {
   const [hourlyTemp5, setHourlyTemp5] = useState([]);
   const [hourlyTemp6, setHourlyTemp6] = useState([]);
   const [hourlyTemp7, setHourlyTemp7] = useState([]);
+  
+  const [locations, setLocations] = useState(["temp","temp1"]);
+
+  const [data, setData] = useState([]);
 
   // weather api key
   const apiKey = "718d0502e1fdf804f510f63140737137";
@@ -32,35 +41,91 @@ function App() {
   // fetching weather data
   let lat = 51.5;
   let lon = 0.1;
-  let fiveDaysURL = `api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+  /*
+  let fiveDaysURL = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&appid=${apiKey}`; NEED TO WAIT FOR UNI INSTRUCTIONS COS I NEED THE STUDENT VERSION
 
+  const req = new XMLHttpRequest();
+  req.open("GET", fiveDaysURL);
+  req.onload = () => {
+    setData(req.response);
+  }
+  req.send();
+
+  console.log("PRINTINGNNNNN \n" + data + "\n END");
+
+  // things reqiuired from user
+   - location
+   - date viewing for the hourly (if we have time)
+   - motorbike type for the wind speed etc
+  */
  
-  // styles 
-  const weatherButtonStyle = "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-[10px] m-2 block";
+  // base styles 
+  const allStyle = "h-[100vh] grid grid-rows-[10%_80%_10%] md:grid-rows-[20%_60%_20%] text-xs md:text-3xl";
+  const mainStyle = "z-30 grid grid-cols-[5%_90%_5%] md:grid-cols-[20%_60%_20%]";
+  const insideMainStyle = "col-start-2 grid grid-cols-1 grid-rows-3 md:grid-cols-3 md:grid-rows-2 border-2";
+  const weatherBoxStyle = "row-start-1 md:col-start-1 md:col-span-2 md:row-start-1 flex justify-center border-2";
+  const hourlyWeatherStyle = "row-start-2 md:col-start-1 md:col-span-2 md:row-start-2 border-2";
+  const motorbikeStyle = "row-start-3 md:col-start-3 md:row-span-2 md:row-start-1 border-2 grid grid-rows-[15%_15%_60%_10%] grid-cols-1 md:grid-cols-2 md:grid-rows-[10%_80%_10%]";
+  const weatherButtonStyle = "w-[12%] m-1 md:m-2 border-2 grid grid-rows-[20%_60%_20%]";
+  const dangerIconStyle = "border-2 md:col-span-2";
+  const dangerTextStyle = "border-2 md:col-span-2";
+  const footerStyle = "text-center text-xxs md:text-sm mt-6 md:mt-20";
+
+
 
   return (
-    <div className="App">
+    <div className={allStyle}>
       <header className="text-blue-400">
-       TEMp
+       Weather App
       </header>
 
-      <main>
-          <div className="flex justify-center">
+      <main className={mainStyle}>
+
+        <div className={insideMainStyle}>
+      
+          <div className={weatherBoxStyle}>
           {
             buttonDates.map((date,index) => {
               return (
                 <button key={index} className={weatherButtonStyle}>
                   <p>{date}</p>
+                  <p>IMAGE</p>
                   <p>{buttonDays[index]}</p>
                 </button>
               )
             })
           }
           </div>
+
+          <div className={hourlyWeatherStyle}>
+            graph
+          </div>
+
+          <div className={motorbikeStyle}>
+            <select placeholder="Select Motorbike Type" defaultValue={0}>
+              <option value="0">Street</option>
+              <option value="1">Sports</option>
+              <option value="2">Scooter</option>
+              <option value="3">Cruiser</option>
+              <option value="4">Off-road</option>
+            </select>
+            <select>
+              {
+                locations.map((location,index) => {
+                  return (
+                    <option key={index} value={location}>{location}</option>
+                  )
+                })
+              }
+            </select>
+            <p className={dangerIconStyle}>image of the thing</p>
+            <p className={dangerTextStyle}>Danger Levels: OK</p>
+          </div>
+        </div>
       </main>
 
       <footer>
-
+        <p className={footerStyle}>all rights reserved</p>
       </footer>
     </div>
   );
