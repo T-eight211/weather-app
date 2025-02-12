@@ -60,29 +60,28 @@ function App() {
   */
  
   // base styles 
-  const allStyle = "h-[100vh] grid grid-rows-[10%_80%_10%] md:grid-rows-[20%_60%_20%] text-xs md:text-3xl";
+  const allStyle = `h-[100vh] grid grid-rows-[10%_80%_10%] md:grid-rows-[20%_60%_20%] text-xs md:text-3xl text-blue-700`;
+  const headerStyle = "text-left text-2xl md:text-5xl font-bold p-2 md:p-6";
   const mainStyle = "z-30 grid grid-cols-[5%_90%_5%] md:grid-cols-[20%_60%_20%]";
-  const insideMainStyle = "col-start-2 grid grid-cols-1 grid-rows-3 md:grid-cols-3 md:grid-rows-2 border-2";
-  const weatherBoxStyle = "row-start-1 md:col-start-1 md:col-span-2 md:row-start-1 flex justify-center border-2";
-  const hourlyWeatherStyle = "row-start-2 md:col-start-1 md:col-span-2 md:row-start-2 border-2";
-  const motorbikeStyle = "row-start-3 md:col-start-3 md:row-span-2 md:row-start-1 border-2 grid grid-rows-[15%_15%_60%_10%] grid-cols-1 md:grid-cols-2 md:grid-rows-[10%_80%_10%]";
-  const weatherButtonStyle = "w-[12%] m-1 md:m-2 border-2 grid grid-rows-[20%_60%_20%]";
-  const dangerIconStyle = "border-2 md:col-span-2";
-  const dangerTextStyle = "border-2 md:col-span-2";
+  const insideMainStyle = "col-start-2 grid grid-cols-1 grid-rows-3 md:grid-cols-3 md:grid-rows-2 bg-white bg-opacity-85";
+  const weatherBoxStyle = "row-start-1 md:col-start-1 md:col-span-2 md:row-start-1 flex justify-center";
+  const hourlyWeatherStyle = "row-start-2 md:col-start-1 md:col-span-2 md:row-start-2 m-2 md:m-4";
+  const motorbikeStyle = "row-start-3 md:col-start-3 md:row-span-2 md:row-start-1 border-[1px] border-blue-500 rounded-[3px] grid grid-rows-[15%_15%_60%_10%] grid-cols-1 md:grid-cols-2 md:grid-rows-[10%_80%_10%] m-1 md:m-2 text-xs md:text-2xl p-1";
+  const weatherButtonStyle = "w-[12%] h-[70%] m-1 md:m-2 border-[1px] border-blue-500 rounded-[3px] grid grid-rows-[20%_60%_20%] bg-gradient-to-t from-[#000340] to-blue-500 text-white text-center text-1XL md:text-2XL font-bold";
+  const dangerIconStyle = "md:col-span-2";
+  const dangerTextStyle = "md:col-span-2";
   const footerStyle = "text-center text-xxs md:text-sm mt-6 md:mt-20";
-
-
+  const gradientStyle = "from-[#000340] via-[#FFFFFF] to-[#FFFFFF]";
+  const inputsStyle = "border-b-[1px] border-blue-500 rounded-[3px] m-1 md:m-2";
 
   return (
-    <div className={allStyle}>
-      <header className="text-blue-400">
-       Weather App
+    <div className={allStyle + " z-10"}>
+      <header className={`z-30 bg-gradient-to-bl  + ${gradientStyle}`}>
+        <h1 className={headerStyle}>W</h1>
       </header>
 
       <main className={mainStyle}>
-
         <div className={insideMainStyle}>
-      
           <div className={weatherBoxStyle}>
           {
             buttonDates.map((date,index) => {
@@ -102,14 +101,14 @@ function App() {
           </div>
 
           <div className={motorbikeStyle}>
-            <select placeholder="Select Motorbike Type" defaultValue={0}>
+            <select className={inputsStyle} placeholder="Select Motorbike Type" defaultValue={0}>
               <option value="0">Street</option>
               <option value="1">Sports</option>
               <option value="2">Scooter</option>
               <option value="3">Cruiser</option>
               <option value="4">Off-road</option>
             </select>
-            <select>
+            <select className={inputsStyle}>
               {
                 locations.map((location,index) => {
                   return (
@@ -124,7 +123,7 @@ function App() {
         </div>
       </main>
 
-      <footer>
+      <footer className={`z-30 bg-gradient-to-tr  + ${gradientStyle}`}>
         <p className={footerStyle}>all rights reserved</p>
       </footer>
     </div>
