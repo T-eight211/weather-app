@@ -1,5 +1,15 @@
 import React, {useState,useEffect} from 'react';
 import './App.css';
+import img200 from './images/weatherIcons/200.png';
+import img300 from './images/weatherIcons/300.png';
+import img500 from './images/weatherIcons/500.png';
+import img600 from './images/weatherIcons/600.png';
+import img700 from './images/weatherIcons/700.png';
+import img800 from './images/weatherIcons/800.png';
+import img801 from './images/weatherIcons/801.png';
+import { Line } from "react-chartjs-2"
+import {Chart as ChartJs, Legend, plugins, scales, Tooltip} from "chart.js/auto";
+
 
 /* 
 NOTE TO SELF:
@@ -23,15 +33,37 @@ function App() {
   }
 
   // initiallizing state variables
-  const [hourlyTemp1, setHourlyTemp1] = useState([]);
-  const [hourlyTemp2, setHourlyTemp2] = useState([]);
-  const [hourlyTemp3, setHourlyTemp3] = useState([]);
-  const [hourlyTemp4, setHourlyTemp4] = useState([]);
-  const [hourlyTemp5, setHourlyTemp5] = useState([]);
-  const [hourlyTemp6, setHourlyTemp6] = useState([]);
-  const [hourlyTemp7, setHourlyTemp7] = useState([]);
-  
-  const [locations, setLocations] = useState(["temp","temp1"]);
+  const [dailyWeather, setDailyWeather] = useState([img200,img300,img500,img600,img700,img800,img801]);
+  const [hourlyTemp, sethourlyTemp] = useState([]);
+  const [locations, setLocations] = useState(["loaction","temp1"]);
+  const [danger, setDanger] = useState(0);
+  const [dangerText, setDangerText] = useState("LOW");
+  useEffect(() => {
+    if (danger === 0) {
+      setDangerText("LOW");
+    }
+    else if (danger === 1) {
+      setDangerText("OK");
+    }
+    else {
+      setDangerText("HIGH");
+    }
+  },[danger]);
+
+  const [lineChartData, setLineChartData] = useState({
+    labels: ["00","","","03","","","06","","","09","","","12","","","15","","","18","","","21","",""],
+    datasets: [{
+      label: "Hourly Temprature",
+      data: [25,28,22,30,27,26,24,21,29,23,22,20,26,27,30,28,25,23,22,21,29,30,27,24],
+      fill: true,
+      backgroundColor: '#214aa6',
+      borderColor: '#214aa6',
+      borderWidth: 1,
+      pointRadius: 0,
+      tension: 0.2
+    }] 
+    
+  });
 
   const [data, setData] = useState([]);
 
@@ -60,19 +92,40 @@ function App() {
   */
  
   // base styles 
-  const allStyle = `h-[100vh] grid grid-rows-[10%_80%_10%] md:grid-rows-[20%_60%_20%] text-xs md:text-3xl text-blue-700`;
-  const headerStyle = "text-left text-2xl md:text-5xl font-bold p-2 md:p-6";
-  const mainStyle = "z-30 grid grid-cols-[5%_90%_5%] md:grid-cols-[20%_60%_20%]";
-  const insideMainStyle = "col-start-2 grid grid-cols-1 grid-rows-3 md:grid-cols-3 md:grid-rows-2 bg-white bg-opacity-85";
-  const weatherBoxStyle = "row-start-1 md:col-start-1 md:col-span-2 md:row-start-1 flex justify-center";
-  const hourlyWeatherStyle = "row-start-2 md:col-start-1 md:col-span-2 md:row-start-2 m-2 md:m-4";
-  const motorbikeStyle = "row-start-3 md:col-start-3 md:row-span-2 md:row-start-1 border-[1px] border-blue-500 rounded-[3px] grid grid-rows-[15%_15%_60%_10%] grid-cols-1 md:grid-cols-2 md:grid-rows-[10%_80%_10%] m-1 md:m-2 text-xs md:text-2xl p-1";
-  const weatherButtonStyle = "w-[12%] h-[70%] m-1 md:m-2 border-[1px] border-blue-500 rounded-[3px] grid grid-rows-[20%_60%_20%] bg-gradient-to-t from-[#000340] to-blue-500 text-white text-center text-1XL md:text-2XL font-bold";
-  const dangerIconStyle = "md:col-span-2";
-  const dangerTextStyle = "md:col-span-2";
-  const footerStyle = "text-center text-xxs md:text-sm mt-6 md:mt-20";
+  const allStyle = `h-[100vh] min-h-[670px] min-w-[365px] grid grid-rows-[10%_80%_10%] xl:grid-rows-[20%_60%_20%] text-xs xl:text-3xl text-blue-700`;
+  const headerStyle = "text-left text-2xl xl:text-5xl font-bold p-2 xl:p-6";
+  const mainStyle = "z-30 grid grid-cols-[5%_90%_5%] xl:grid-cols-[20%_60%_20%]";
+  const insideMainStyle = "col-start-2 grid grid-cols-1 grid-rows-3 xl:grid-cols-3 xl:grid-rows-2 bg-white bg-opacity-85";
+  const weatherBoxStyle = "row-start-1 xl:col-start-1 xl:col-span-2 xl:row-start-1 flex justify-center";
+  const hourlyWeatherStyle = "row-start-2 xl:col-start-1 xl:col-span-2 xl:row-start-2 m-2 xl:m-4";
+  const motorbikeStyle = "row-start-3 xl:col-start-3 xl:row-span-2 xl:row-start-1 border-[1px] rounded-[3px] grid grid-rows-[15%_15%_10%_60%] grid-cols-1 xl:grid-cols-2 xl:grid-rows-[10%_10%_80%] m-1 xl:m-2 text-xs xl:text-2xl p-1";
+  const weatherButtonStyle = "w-[12%] h-[70%] m-1 xl:m-2 border-[1px] border-blue-500 rounded-[3px] grid grid-rows-[20%_60%_20%] bg-gradient-to-t from-[#000340] to-blue-500 text-white text-center text-1XL xl:text-2XL font-bold";
+  const dangerIconStyle = "xl:col-span-2 mx-auto my-auto";
+  const dangerTextStyle = "xl:col-span-2 ml-1 xl:ml-2 mt-auto text-xs xl:text-base text-black font-bold";
+  const footerStyle = "text-center text-xxs xl:text-sm mt-6 xl:mt-20";
   const gradientStyle = "from-[#000340] via-[#FFFFFF] to-[#FFFFFF]";
-  const inputsStyle = "border-b-[1px] border-blue-500 rounded-[3px] m-1 md:m-2";
+  const inputsStyle = "border-b-[1px] border-blue-500 rounded-[3px] m-1 xl:m-2 text-xs xl:text-base";
+  const imageStyle = "w-[80%] mx-auto my-auto";
+  const lowDangerStyle = "bg-[radial-gradient(circle,#FFF,#90EE90)] border-green-500 text-green-700";
+  const mediumDangerStyle = "bg-[radial-gradient(circle,#FFF,#FFDBBB)] border-orange-500 text-orange-700";
+  const highDangerStyle = "bg-[radial-gradient(circle,#FFF,#FF8080)] border-red-500 text-red-700";
+  const bigDangerTextStyle = "text-9xl font-bold text-center";
+
+  const chartStyle = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        grid: {
+          display: false,
+        }
+      },
+      y: {
+        suggestedMin: Math.min(...lineChartData.datasets[0].data) - 2,
+        suggestedMax: Math.max(...lineChartData.datasets[0].data) + 2,
+      },
+    },
+  }
 
   return (
     <div className={allStyle + " z-10"}>
@@ -88,7 +141,7 @@ function App() {
               return (
                 <button key={index} className={weatherButtonStyle}>
                   <p>{date}</p>
-                  <p>IMAGE</p>
+                  <img className={imageStyle} src={dailyWeather[index]}/>
                   <p>{buttonDays[index]}</p>
                 </button>
               )
@@ -97,16 +150,17 @@ function App() {
           </div>
 
           <div className={hourlyWeatherStyle}>
-            graph
+            <Line data={lineChartData} options={chartStyle}/>
           </div>
 
-          <div className={motorbikeStyle}>
-            <select className={inputsStyle} placeholder="Select Motorbike Type" defaultValue={0}>
-              <option value="0">Street</option>
+          <div className={`${motorbikeStyle}+ " " + ${danger === 0 ? lowDangerStyle : danger === 1 ? mediumDangerStyle : highDangerStyle}`}>
+            <select className={inputsStyle} placeholder="Motorbike Type" defaultValue={0}>
+              <option value="0">Motorbike Type</option>
               <option value="1">Sports</option>
               <option value="2">Scooter</option>
               <option value="3">Cruiser</option>
               <option value="4">Off-road</option>
+              <option value="5">Street</option>
             </select>
             <select className={inputsStyle}>
               {
@@ -117,8 +171,11 @@ function App() {
                 })
               }
             </select>
-            <p className={dangerIconStyle}>image of the thing</p>
-            <p className={dangerTextStyle}>Danger Levels: OK</p>
+            <p className={dangerTextStyle}>Danger Levels:</p>
+            <div className={dangerIconStyle}>
+              <p className={bigDangerTextStyle}>{dangerText}</p>
+            </div>
+            
           </div>
         </div>
       </main>
