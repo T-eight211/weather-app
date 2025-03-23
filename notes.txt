@@ -1,0 +1,5 @@
+npm install lucide-react
+npm install js-cookie framer-motion
+npm install react-chartjs-2 chart.js
+
+mention tailwind version 4
