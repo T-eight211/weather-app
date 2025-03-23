@@ -54,7 +54,7 @@ const WeatherSlider: React.FC = () => {
         return (
           <video
             key={path}
-            ref={(el) => (videoRefs.current[index] = el)}
+            ref={(el) => { videoRefs.current[index] = el; }}
             src={path}
             autoPlay
             muted
