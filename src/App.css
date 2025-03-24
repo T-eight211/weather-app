@@ -8,3 +8,14 @@ header, main, footer {
     font-family: "Carlito", serif;
 }
 
+.bg-style-dark {
+    background: radial-gradient(circle, #1B2F4A 0%, #08131E 56%);
+}
+
+.text-style-dark {
+    color: white;
+}
+.bg-style-light {
+    background: radial-gradient(circle, #FAFCFF 0%, #E4EFF9 56%);
+}
+
