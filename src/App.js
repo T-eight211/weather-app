@@ -14,7 +14,7 @@ import dangerHigh from './images/dangerHigh.png';
 import logo from './images/logo.png';
 import { Line } from "react-chartjs-2"
 import {Chart as ChartJs, Legend, plugins, scales, Tooltip} from "chart.js/auto";
-
+const dangerCount=0;
 
 /* 
 NOTE TO SELF:
@@ -42,6 +42,7 @@ function App() {
     value: location,
     label: location,
   }));
+  
   const motorbikeTypeOptions = [
     { value: "1", label: "Sports" },
     { value: "2", label: "Scooter" },
@@ -49,6 +50,26 @@ function App() {
     { value: "4", label: "Off-road" },
     { value: "5", label: "Street" },
   ];
+
+  const handleMotorbikeTypeChange = (selectedOption) => {
+    if (selectedOption.value === "1") {
+      dangerCount += 1;
+    }
+    if (selectedOption.value === "2") {
+      dangerCount += 2;
+    }
+    if (selectedOption.value === "3") {
+      dangerCount += 3;
+    }
+    if (selectedOption.value === "4") {
+      dangerCount += 4;
+    }
+    if (selectedOption.value === "5") {
+      dangerCount += 5;
+    }
+    console.log(dangerCount);
+  };
+
   const [lineChartData, setLineChartData] = useState({
     labels: ["00:00","","","03:00","","","06:00","","","09:00","","","12:00","","","15:00","","","18:00","","","21:00","",""],
     datasets: [{
