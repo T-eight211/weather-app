@@ -2,6 +2,7 @@
 // To do list
 // 1. fix the destination select boxes
 // 2. create numerical values for the danger levels of the motorbikes through the used vehicle type
+// 3. create a function that calculates the danger level of the trip based on the location
 // 3. create a function that calculates the danger level of the trip based on the weather conditions
 // 4. create a function that calculates the danger level of the trip based on the road conditions
 // 5. add up the danger levels of the motorbike, weather and road conditions to get the total danger level of the trip
