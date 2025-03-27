@@ -1,3 +1,12 @@
+
+// To do list
+// 1. fix the destination select boxes
+// 2. create numerical values for the danger levels of the motorbikes through the used vehicle type
+// 3. create a function that calculates the danger level of the trip based on the weather conditions
+// 4. create a function that calculates the danger level of the trip based on the road conditions
+// 5. add up the danger levels of the motorbike, weather and road conditions to get the total danger level of the trip
+// 6. create a function that changes the danger level meter image based on the total danger level of the trip
+
 import React, {useState, useEffect, useRef} from 'react';
 import Select from 'react-select';
 import './App.css';
@@ -14,7 +23,7 @@ import dangerHigh from './images/dangerHigh.png';
 import logo from './images/logo.png';
 import { Line } from "react-chartjs-2"
 import {Chart as ChartJs, Legend, plugins, scales, Tooltip} from "chart.js/auto";
-const dangerCount=0;
+var typeDanger=0;
 
 /* 
 NOTE TO SELF:
@@ -35,13 +44,75 @@ function App() {
   }
   firstDate = new Date();
 
+
+  
+  var locationDanger = 0;
+
   // initiallizing state variables
-  const [dailyWeather,setDailyWeather] = useState([img200,img300,img500,img600,img700,img800,img801]);
-  const locations= useState(["loaction","temp1"]); // change this
-  const locationOptions = locations.map(location => ({
-    value: location,
-    label: location,
+  const [dailyWeather] = useState([img200,img300,img500,img600,img700,img800,img801]);
+  const locations = [
+    { label: "London", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Birmingham", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Manchester", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Brighton", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Wolverhampton", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Liverpool", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Leeds", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Sheffield", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Bristol", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Nottingham", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Leicester", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Coventry", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Newcastle", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Southampton", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Portsmouth", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Cardiff", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Edinburgh", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Glasgow", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Aberdeen", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Dundee", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Inverness", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Stirling", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Perth", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Norwich", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Cambridge", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Oxford", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Reading", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Milton Keynes", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Luton", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Slough", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Derby", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Hull", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "York", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Exeter", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Plymouth", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Swansea", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Bangor", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Newport", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Chelmsford", value: Math.floor(Math.random() * 5) + 1 },
+    { label: "Ipswich", value: Math.floor(Math.random() * 5) + 1 }
+  ];
+
+  const locationOptions = locations.map((location) => ({
+    value: location.value,
+    label: location.label,
   }));
+
+
+
+
+
+  let handleLocationChange = (selectedOption) => {
+    locationDanger = selectedOption.value;
+    console.log(locationDanger);
+    
+  };
+
+
+
+
+  var typeDanger
+
   
   const motorbikeTypeOptions = [
     { value: "1", label: "Sports" },
@@ -51,23 +122,23 @@ function App() {
     { value: "5", label: "Street" },
   ];
 
-  const handleMotorbikeTypeChange = (selectedOption) => {
+  let handleMotorbikeTypeChange = (selectedOption) => {
     if (selectedOption.value === "1") {
-      dangerCount += 1;
+      typeDanger = 1;
     }
     if (selectedOption.value === "2") {
-      dangerCount += 2;
+      typeDanger = 2;
     }
     if (selectedOption.value === "3") {
-      dangerCount += 3;
+      typeDanger = 3;
     }
     if (selectedOption.value === "4") {
-      dangerCount += 4;
+      typeDanger = 4;
     }
     if (selectedOption.value === "5") {
-      dangerCount += 5;
+      typeDanger = 5;
     }
-    console.log(dangerCount);
+    console.log(typeDanger);
   };
 
   const [lineChartData, setLineChartData] = useState({
@@ -198,6 +269,7 @@ function App() {
                   placeholder="Motorbike Type"
                   styles={reactSelectStyle}
                   isSearchable
+                  onChange={handleMotorbikeTypeChange}
               />
             </div>
             <p className={InfoText}>Destination:</p>
@@ -210,6 +282,7 @@ function App() {
                     placeholder="From"
                     styles={reactSelectStyle}
                     isSearchable
+                    onChange={handleLocationChange}
                 />
 
               </div>
@@ -222,6 +295,7 @@ function App() {
                     placeholder="To"
                     styles={reactSelectStyle}
                     isSearchable
+                    onChange={handleLocationChange}
                 />
               </div>
             </div>
