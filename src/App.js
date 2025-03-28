@@ -47,7 +47,6 @@ function App() {
 
 
   
-  var locationDanger = 0;
 
   // initiallizing state variables
   const [dailyWeather] = useState([img200,img300,img500,img600,img700,img800,img801]);
@@ -94,6 +93,8 @@ function App() {
     { label: "Ipswich", value: Math.floor(Math.random() * 5) + 1 }
   ];
 
+  
+
   const locationOptions = locations.map((location) => ({
     value: location.value,
     label: location.label,
@@ -103,16 +104,23 @@ function App() {
 
 
 
-  let handleLocationChange = (selectedOption) => {
-    locationDanger = selectedOption.value;
-    console.log(locationDanger);
-    
-  };
+ 
+
+
+const [locations2, setLocations2] = useState(locationOptions); // State for second dropdown options
+
+let handleLocationChange = (selectedOption) => {
+  // Filter out the selected option from the second dropdown options
+  const filteredLocations = locations.filter((location) => location.label !== selectedOption.label);
+  setLocations2(filteredLocations.map((location) => ({
+    value: location.value,
+    label: location.label,
+  })));
+  console.log("Selected Location (From):", selectedOption.label);
+};
 
 
 
-
-  var typeDanger
 
   
   const motorbikeTypeOptions = [
@@ -292,11 +300,10 @@ function App() {
                 <Select
                     id={`location2`}
                     classNames={inputsStyle}
-                    options={locationOptions}
+                    options={locations2}
                     placeholder="To"
                     styles={reactSelectStyle}
                     isSearchable
-                    onChange={handleLocationChange}
                 />
               </div>
             </div>
