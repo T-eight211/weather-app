@@ -109,14 +109,26 @@ function App() {
 
 const [locations2, setLocations2] = useState(locationOptions); // State for second dropdown options
 
+
+
+const [isLocation2Enabled, setIsLocation2Enabled] = useState(false); //initially disabled second dropdown
+
+
+
+
+
+
 let handleLocationChange = (selectedOption) => {
+
+  // Enable the second dropdown when an option is selected
+  setIsLocation2Enabled(true);
+
   // Filter out the selected option from the second dropdown options
   const filteredLocations = locations.filter((location) => location.label !== selectedOption.label);
   setLocations2(filteredLocations.map((location) => ({
     value: location.value,
     label: location.label,
   })));
-  console.log("Selected Location (From):", selectedOption.label);
 };
 
 
@@ -182,9 +194,9 @@ let handleLocationChange = (selectedOption) => {
   const InfoText = `text-base xl:text-xl xl:my-2 font-bold`
   const selectDivStyle = `p-0`;
   const reactSelectStyle = {
-    control: (provided) => ({
+    control: (provided,state) => ({
       ...provided,
-      backgroundColor: "#4C71AD",
+      backgroundColor: state.isDisabled ? "#A9A9A9" : "#4C71AD", // Grey background when disabled
       border: "0px solid transparent",
       borderRadius: "25px",
       padding: "2px",
@@ -304,6 +316,7 @@ let handleLocationChange = (selectedOption) => {
                     placeholder="To"
                     styles={reactSelectStyle}
                     isSearchable
+                    isDisabled={!isLocation2Enabled}
                 />
               </div>
             </div>
