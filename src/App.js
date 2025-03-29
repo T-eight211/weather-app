@@ -1,6 +1,5 @@
 
 // To do list
-// 1. fix the destination select boxes
 // 2. create numerical values for the danger levels of the motorbikes through the used vehicle type
 // 3. create a function that calculates the danger level of the trip based on the location
 // 3. create a function that calculates the danger level of the trip based on the weather conditions
@@ -118,7 +117,7 @@ const [isLocation2Enabled, setIsLocation2Enabled] = useState(false); //initially
 
 
 
-let handleLocationChange = (selectedOption) => {
+let handleLocationChange2 = (selectedOption) => {
 
   // Enable the second dropdown when an option is selected
   setIsLocation2Enabled(true);
@@ -136,29 +135,15 @@ let handleLocationChange = (selectedOption) => {
 
   
   const motorbikeTypeOptions = [
-    { value: "1", label: "Sports" },
-    { value: "2", label: "Scooter" },
-    { value: "3", label: "Cruiser" },
+    { value: "1", label: "Street" },
+    { value: "2", label: "Cruiser" },
+    { value: "3", label: "Sports" },
     { value: "4", label: "Off-road" },
-    { value: "5", label: "Street" },
+    { value: "5", label: "Scooter" },
   ];
 
   let handleMotorbikeTypeChange = (selectedOption) => {
-    if (selectedOption.value === "1") {
-      typeDanger = 1;
-    }
-    if (selectedOption.value === "2") {
-      typeDanger = 2;
-    }
-    if (selectedOption.value === "3") {
-      typeDanger = 3;
-    }
-    if (selectedOption.value === "4") {
-      typeDanger = 4;
-    }
-    if (selectedOption.value === "5") {
-      typeDanger = 5;
-    }
+    typeDanger = Number(selectedOption.value);
     console.log(typeDanger);
   };
 
@@ -303,7 +288,7 @@ let handleLocationChange = (selectedOption) => {
                     placeholder="From"
                     styles={reactSelectStyle}
                     isSearchable
-                    onChange={handleLocationChange}
+                    onChange={handleLocationChange2}
                 />
 
               </div>
