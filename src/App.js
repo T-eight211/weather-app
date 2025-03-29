@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
+import axios from "axios";
 import Select from 'react-select';
 import './App.css';
 import img200 from './images/weatherIcons/200.png';
@@ -24,24 +25,160 @@ for simplicity we will use one pic for each weather type and not differentiate b
 function App() {
   // setting up variables for the weather buttons
   let firstDate = new Date();
-  firstDate.setDate(new Date().getDate()-3);
-  let dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  let buttonDates = [];
-  let buttonDays = [];
-  for (let i = 0; i < 7; i++) {
-    buttonDates.push(firstDate.getDate());
-    buttonDays.push(dayNames[firstDate.getDay()]);
-    firstDate.setDate(firstDate.getDate() + 1);
+  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const buttonDates = useRef([]);
+  const buttonDays = useRef([]);
+  const dayTemps = useRef({});
+  const avgTemps = useRef({});
+  const dayWeathers= useRef({});
+  const dailyWeather = useRef({});
+  const API_KEY = "718d0502e1fdf804f510f63140737137";
+  // by default the lon and lat is londons
+  const LAT = "51.5072";
+  const LON = "0.1276";
+
+  const fetchWeatherData = async () => {
+    try {
+      const currentTime = Math.floor(Date.now() / 1000);
+      const pastStart = currentTime - 3 * 24 * 60 * 60;
+      const forecastAPI = `https://pro.openweathermap.org/data/2.5/forecast/hourly?lat=${LAT}&lon=${LON}&appid=${API_KEY}&units=metric`;
+      const historicalAPI = `https://history.openweathermap.org/data/2.5/history/city?lat=${LAT}&lon=${LON}&type=hour&start=${pastStart}&end=${currentTime}&appid=${API_KEY}&units=metric`;
+
+      const [forecastRes, historicalRes] = await Promise.all([
+        axios.get(forecastAPI),
+        axios.get(historicalAPI),
+      ]);
+
+      const combinedData = [...historicalRes.data.list, ...forecastRes.data.list];
+      const groupedTemps = {};
+      const groupedWeathers = {};
+
+      combinedData.forEach((entry) => {
+        let tempDT = new Date(entry.dt * 1000);
+        tempDT.setUTCHours(0, 0, 0, 0);
+        const dateStr = tempDT.getDate().toString();
+        const temp = Math.floor(entry.main.temp);
+        const condition = entry.weather[0].id;
+
+        if (!groupedTemps[dateStr]) {
+          groupedTemps[dateStr] = [];
+          groupedWeathers[dateStr] = [];
+        }
+        if (!buttonDates.current.includes(dateStr)) {
+          buttonDates.current.push(dateStr);
+          buttonDays.current.push(dayNames[tempDT.getDay()]);
+        }
+
+        groupedTemps[dateStr].push(temp);
+        groupedWeathers[dateStr].push(condition);
+      });
+
+      console.log(groupedWeathers);
+      console.log(buttonDays.current);
+      console.log(buttonDates.current);
+      dayTemps.current = groupedTemps;
+      dayWeathers.current = groupedWeathers;
+      for (let key in dayWeathers.current) {
+        avgTemps.current[key] = getModalTemperature(dayTemps.current[key]);
+        const tempAvgWeather = getModalWeather(dayWeathers.current[key]);
+        if (tempAvgWeather === "801") {
+          dailyWeather.current[key] = img801;
+        }
+        else {
+          const tempVar = Math.floor(parseInt(tempAvgWeather));
+          if (tempVar === 200) {
+            dailyWeather.current[key] = img200;
+          }
+          else if (tempVar === 300) {
+            dailyWeather.current[key] = img300;
+          }
+          else if (tempVar === 500) {
+            dailyWeather.current[key] = img500;
+          }
+          else if (tempVar === 600) {
+            dailyWeather.current[key] = img600;
+          }
+          else if (tempVar === 700) {
+            dailyWeather.current[key] = img700;
+          }
+          else {
+            dailyWeather.current[key] = img800;
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching weather data:", error);
+    }
+    changeDatePicked(firstDate.getDate());
+  };
+
+  function getModalWeather(arr) {
+    const freqMap = {};
+    let maxFreq = 0;
+    let modalWeather = null;
+    let alternativeModal = null;
+
+    for (let num of arr) {
+      freqMap[num] = (freqMap[num] || 0) + 1;
+      if (freqMap[num] > maxFreq) {
+        maxFreq = freqMap[num];
+        if (num !== 801) {
+          alternativeModal = num;
+        }
+        modalWeather = num;
+      }
+    }
+
+    return alternativeModal !== null ? alternativeModal : modalWeather;
   }
-  firstDate = new Date();
+
+  function getModalTemperature(arr) {
+    const freqMap = {};
+    let maxFreq = 0;
+    let modalTemp = null;
+
+    for (let num of arr) {
+      freqMap[num] = (freqMap[num] || 0) + 1;
+      if (freqMap[num] > maxFreq) {
+        maxFreq = freqMap[num];
+        modalTemp = num;
+      }
+    }
+
+    return modalTemp;
+  }
+
+
+  useEffect(() => {
+    fetchWeatherData();
+  }, []);
+
+  const changeDatePicked = (date) => {
+    let labelH = [];
+    for (let i = 24 - dayTemps.current[date].length; i < 24; i++) {
+      labelH.push(i.toString().padStart(2, '0'));
+    }
+
+    setLineChartData({
+      labels: labelH,
+      datasets: [{
+        label: "Hourly Temperature",
+        data: dayTemps.current[date],
+        fill: true,
+        backgroundColor: 'rgba(37, 54, 82, 0.8)',
+        borderColor: '#4C71AD',
+        borderWidth: 1,
+        pointRadius: 0,
+        tension: 0.2
+      }]
+    });
+  };
 
   // initiallizing state variables
-  const [dailyWeather,setDailyWeather] = useState([img200,img300,img500,img600,img700,img800,img801]);
-  const locations= useState(["loaction","temp1"]); // change this
-  const locationOptions = locations.map(location => ({
-    value: location,
-    label: location,
-  }));
+  const [locations,setLocations]= useState(["loaction",'location',"temp1",'temp1']); // change this
+  const locationOptions = locations.map(location => (
+    {value: location, label: location}
+  ));
   const motorbikeTypeOptions = [
     { value: "1", label: "Sports" },
     { value: "2", label: "Scooter" },
@@ -50,10 +187,10 @@ function App() {
     { value: "5", label: "Street" },
   ];
   const [lineChartData, setLineChartData] = useState({
-    labels: ["00:00","","","03:00","","","06:00","","","09:00","","","12:00","","","15:00","","","18:00","","","21:00","",""],
+    labels: [],
     datasets: [{
       label: "Hourly Temperature",
-      data: [25,28,22,30,27,26,24,21,29,23,22,20,26,27,30,28,25,23,22,21,29,30,27,24],
+      data: [],
       fill: true,
       backgroundColor: 'rgba(37, 54, 82, 0.8)',
       borderColor: '#4C71AD',
@@ -62,17 +199,17 @@ function App() {
       tension: 0.2
     }]
   });
-  const [selectedDay, setSelectedDay] = useState(3);
+  const [selectedDay, setSelectedDay] = useState(firstDate.getDate().toString());
 
  
   // base styles 
   const allStyle = `h-screen min-h-[670px] min-w-[365px] grid grid-rows-[5%_90%_5%] xl:grid-rows-[20%_60%_20%] text-xs xl:text-3xl ${(firstDate.getHours() >= 6 && firstDate.getHours() <= 18) ? `bg-style-light text-style-dark` : `bg-style-dark text-style-dark`} `;
   const mainStyle = "z-30 xl:grid grid-cols-[5%_90%_5%] xl:grid-cols-[10%_80%_10%]";
-  const insideMainStyle = "col-start-2 grid grid-cols-1 grid-rows-[2fr_1fr_4fr] xl:grid-cols-3 xl:grid-rows-2 white";
+  const insideMainStyle = "col-start-2 grid grid-cols-1 grid-rows-[2fr_1fr_4fr] xl:grid-cols-[35%_35%_30%] xl:grid-rows-2 white";
   const weatherBoxStyle = "row-start-2 xl:col-start-1 xl:col-span-2 flex justify-center border-0 bg-[#253652] rounded-[15px] xl:rounded-[50px] mx-1 xl:mx-0";
   const hourlyWeatherStyle = "row-start-1 xl:col-start-1 xl:col-span-2 m-2 xl:m-4 grid grid-cols-[1fr_4fr] ";
   const motorbikeStyle = "row-start-3 xl:col-start-3 xl:row-span-2 xl:row-start-1 bg-[#253652] border-0 rounded-[15px] xl:rounded-[50px] p-4 flex-row m-1 xl:m-2 text-xs xl:text-2xl h-full";
-  const weatherButtonStyle = "w-[13%] xl:w-[12.5%] m-0.5 xl:m-2 border border-[#253652]  rounded-[12px] xl:rounded-[40px] grid grid-rows-[20%_60%_20%] text-center text-1xl xl:text-2xl font-bold hover:border hover:border-[#4C71AD] ";
+  const weatherButtonStyle = "w-auto m-0.5 xl:m-2 border border-[#253652]  rounded-[12px] xl:rounded-[40px] grid grid-rows-[20%_60%_20%] text-center text-lg xl:text-xl font-bold hover:border hover:border-[#4C71AD] ";
   const dangerTextStyle = "m-1 text-base xl:py-2 xl:mt-4 xl:text-xl font-bold border-t border-[#848C9A]";
   const footerStyle = "text-center text-xxs xl:text-sm mt-2 xl:mt-10 xl:mt-20 text-blue-600";
   const gradientStyle = "";
@@ -147,7 +284,7 @@ function App() {
         <div className={insideMainStyle}>
 
           <div className={hourlyWeatherStyle}>
-            <img className={`my-auto`} src={img200} alt={`average weather image`}/>
+            <img className={`my-auto`} src={dailyWeather.current[selectedDay]} alt={`average weather image`}/>
             <div className={`p-2 my-auto xl:p-6 xl:h-[80%]`}>
               <Line className={`w-[100%]`} data={lineChartData} options={chartStyle}/>
             </div>
@@ -155,12 +292,12 @@ function App() {
 
           <div className={weatherBoxStyle}>
             {
-              buttonDates.map((date,index) => {
+              buttonDates.current.map((date,index) => {
                 return (
-                    <button key={index} onClick={() => {setSelectedDay(index)}} className={`${weatherButtonStyle} ${firstDate.getDate() === date ? ` text-blue-700` : ``} ${selectedDay === index ? ` bg-[#4C71AD]` : ``}`}>
-                      <p>{date}</p>
-                      <img className={imageStyle} src={dailyWeather[index]} alt={`icon of the weather of this date`}/>
-                      <p>{buttonDays[index]}</p>
+                    <button key={date} onClick={() => {changeDatePicked(date)}} className={`${weatherButtonStyle} ${firstDate.getDate() === date ? ` text-blue-700` : ``} ${selectedDay === date ? ` bg-[#4C71AD]` : ``}`}>
+                      <p>{date} - {buttonDays.current[index]}</p>
+                      <img className={imageStyle} src={dailyWeather.current[date]} alt={`icon of the weather of this date`}/>
+                      <p>{avgTemps.current[date]}</p>
                     </button>
                 )
               })
