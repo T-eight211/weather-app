@@ -45,7 +45,7 @@ function App() {
   firstDate = new Date();
 
 
-  
+//RAYYAN CHANGES TO JS CODE  
 
   // initiallizing state variables
   const [dailyWeather] = useState([img200,img300,img500,img600,img700,img800,img801]);
@@ -104,12 +104,9 @@ function App() {
 
 
  
-
-const [locations1, setLocations] = useState(locationOptions); // State for first dropdown
-const [locations2, setLocations2] = useState(locationOptions); // State for second dropdown options
-
-
-
+//state variables for the dropdowns
+const [locations1, setLocations] = useState(locationOptions); // state for first dropdown
+const [locations2, setLocations2] = useState(locationOptions); // state for second dropdown options
 const [isLocation2Enabled, setIsLocation2Enabled] = useState(false); //initially disabled second dropdown
 
 
@@ -127,18 +124,16 @@ let handleLocationChange = (selectedOption) => {
 
 let handleLocationChange2 = (selectedOption) => {
 
-  // Enable the second dropdown when an option is selected
+  // enable the second dropdown when an option is selected
   setIsLocation2Enabled(true);
 
-  // Filter out the selected option from the second dropdown options
+  // filter out the selected option from the second dropdown options
   const filteredLocations = locations.filter((location) => location.label !== selectedOption.label);
   setLocations2(filteredLocations.map((location) => ({
     value: location.value,
     label: location.label,
   })));
 };
-
-
 
 
   
@@ -154,6 +149,16 @@ let handleLocationChange2 = (selectedOption) => {
     typeDanger = Number(selectedOption.value);
     console.log(typeDanger);
   };
+
+
+
+
+
+//ENDS HERE
+
+
+
+
 
   const [lineChartData, setLineChartData] = useState({
     labels: ["00:00","","","03:00","","","06:00","","","09:00","","","12:00","","","15:00","","","18:00","","","21:00","",""],
@@ -189,7 +194,7 @@ let handleLocationChange2 = (selectedOption) => {
   const reactSelectStyle = {
     control: (provided,state) => ({
       ...provided,
-      backgroundColor: state.isDisabled ? "#A9A9A9" : "#4C71AD", // Grey background when disabled
+      backgroundColor: state.isDisabled ? "#A9A9A9" : "#4C71AD", // grey background when disabled
       border: "0px solid transparent",
       borderRadius: "25px",
       padding: "2px",
@@ -286,6 +291,8 @@ let handleLocationChange2 = (selectedOption) => {
                   onChange={handleMotorbikeTypeChange}
               />
             </div>
+
+          
             <p className={InfoText}>Destination:</p>
             <div className={`grid grid-cols-2`}>
               <div className={selectDivStyle}>
