@@ -8,14 +8,66 @@ header, main, footer {
     font-family: "Carlito", serif;
 }
 
-.bg-style-dark {
-    background: radial-gradient(circle, #1B2F4A 0%, #08131E 56%);
-}
-
 .text-style-dark {
     color: white;
 }
-.bg-style-light {
-    background: radial-gradient(circle, #FAFCFF 0%, #E4EFF9 56%);
+
+.weather-bg {
+    position: relative;
+    overflow: hidden;
 }
 
+.weather-bg::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    filter: blur(10px);
+    z-index: -1;
+}
+
+.weather-bg-dark {
+    position: relative;
+    overflow: hidden;
+}
+
+.weather-bg-dark::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    filter: blur(10px);
+    z-index: -2;
+}
+
+
+.weather-bg-dark::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Adjust for darker/lighter effect */
+    z-index: -1;
+}
+
+.clear::before { background-image: url('./images/clear.gif'); }
+.sunny::before { background-image: url('./images/sunny.gif'); }
+.fog::before { background-image: url('./images/fog.gif'); }
+.snow::before { background-image: url('./images/snowGif.gif'); }
+.rain::before { background-image: url('./images/rain.gif'); }
+.thunder::before { background-image: url('./images/thunderstormGif.gif'); }
+.lightRain::before { background-image: url('./images/lightRainGif.gif'); }

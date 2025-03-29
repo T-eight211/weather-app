@@ -43,6 +43,7 @@ function App() {
   const [weatherConditionText, setWeatherConditionText] = useState("");
   const [roadConditionText, setRoadConditionText] = useState("");
   const [safetySuggestion, setSafetySuggestion] = useState("");
+  const [bgImageStyle, setBgImageStyle] = useState("sunny");
 
   const fetchWeatherData = async () => {
     try {
@@ -257,51 +258,57 @@ function App() {
     }
 
     if (dailyWeather.current[selectedDay] === img200) {
+      setBgImageStyle(' thunder ');
       setWeatherConditionText("Thunderstorm");
       setRoadConditionText("Wet and slippery roads.");
       setSafetySuggestion("Don't drive! Seek shelter and stay safe.");
     } else if (dailyWeather.current[selectedDay] === img300) {
+      setBgImageStyle(' lightRain ');
       setWeatherConditionText("Light Rain with Sunshine");
       setRoadConditionText("Slippery roads, exercise caution.");
       setSafetySuggestion("Drive carefully, watch for puddles.");
     } else if (dailyWeather.current[selectedDay] === img500) {
+      setBgImageStyle(' rain ');
       setWeatherConditionText("Rain");
       setRoadConditionText("Wet and slippery roads.");
       setSafetySuggestion("Drive carefully, reduce speed.");
     } else if (dailyWeather.current[selectedDay] === img600) {
+      setBgImageStyle(' snow ');
       setWeatherConditionText("Snow");
       setRoadConditionText("Snowy and slippery roads.");
       setSafetySuggestion("Avoid driving if possible, or use snow chains.");
     } else if (dailyWeather.current[selectedDay] === img700) {
+      setBgImageStyle(' fog ');
       setWeatherConditionText("Fog");
       setRoadConditionText("Limited visibility, roads are tricky.");
       setSafetySuggestion("Drive slowly with headlights on, stay cautious.");
     } else if (dailyWeather.current[selectedDay] === img800) {
+      setBgImageStyle(' sunny ');
       setWeatherConditionText("Sunny");
       setRoadConditionText("Clear roads, great conditions.");
       setSafetySuggestion("Perfect day for a ride, stay alert.");
     } else if (dailyWeather.current[selectedDay] === img801) {
+      setBgImageStyle(' clear ');
       setWeatherConditionText("Clear Skies");
       setRoadConditionText("Perfect road conditions.");
       setSafetySuggestion("Enjoy the ride, but always stay cautious.");
     } else {
-      setWeatherConditionText("Unknown weather condition");
-      setRoadConditionText("unknown conditions.");
-      setSafetySuggestion("Check the weather and be prepared for changes.");
+      setWeatherConditionText("");
+      setRoadConditionText("");
+      setSafetySuggestion("");
     }
     }, [selectedDay,avgTemps.current,dailyWeather.current,bikeType]);
  
   // base styles 
-  const allStyle = `h-screen min-h-[670px] min-w-[365px] grid grid-rows-[5%_90%_5%] xl:grid-rows-[20%_60%_20%] text-xs xl:text-3xl ${(firstDate.getHours() >= 6 && firstDate.getHours() <= 18) ? `bg-style-light text-style-dark` : `bg-style-dark text-style-dark`} `;
+  const allStyle = `h-auto min-h-screen min-w-[365px] grid grid-rows-[5%_90%_5%] xl:grid-rows-[20%_60%_20%] text-xs xl:text-3xl `;
   const mainStyle = "z-30 xl:grid grid-cols-[5%_90%_5%] xl:grid-cols-[10%_80%_10%]";
-  const insideMainStyle = "col-start-2 grid grid-cols-1 grid-rows-[2fr_1fr_4fr] xl:grid-cols-[35%_35%_30%] xl:grid-rows-2 white";
+  const insideMainStyle = "col-start-2 grid grid-cols-1 grid-rows-[2fr_1fr_auto] xl:grid-cols-[35%_35%_30%] xl:grid-rows-[2fr_1fr] white";
   const weatherBoxStyle = "row-start-2 xl:col-start-1 xl:col-span-2 flex justify-center border-0 bg-[#253652] rounded-[15px] xl:rounded-[50px] mx-1 xl:mx-0";
   const hourlyWeatherStyle = "row-start-1 xl:col-start-1 xl:col-span-2 m-2 xl:m-4 grid grid-cols-[1fr_4fr] ";
   const motorbikeStyle = "row-start-3 xl:col-start-3 xl:row-span-2 xl:row-start-1 bg-[#253652] border-0 rounded-[15px] xl:rounded-[50px] p-4 flex-row m-1 xl:m-2 text-xs xl:text-2xl h-full";
-  const weatherButtonStyle = "w-auto m-0.5 xl:m-2 border border-[#253652]  rounded-[12px] xl:rounded-[40px] grid grid-rows-[20%_60%_20%] text-center text-lg xl:text-xl font-bold hover:border hover:border-[#4C71AD] ";
-  const dangerTextStyle = "m-1 text-base xl:py-2 xl:mt-4 xl:text-xl font-bold border-t border-[#848C9A]";
-  const footerStyle = "text-center text-xxs xl:text-sm mt-2 xl:mt-10 xl:mt-20 text-blue-600";
-  const gradientStyle = "";
+  const weatherButtonStyle = "w-auto m-0.5 xl:m-2 border border-[#253652]  rounded-[12px] xl:rounded-[40px] text-center text-xxs xl:text-lg font-bold hover:border hover:border-[#4C71AD] ";
+  const dangerTextStyle = "m-1 text-xs xl:py-2 xl:mt-4 xl:text-base font-bold border-t border-[#848C9A]";
+  const footerStyle = "text-center text-xxs xl:text-sm mt-2 xl:mt-10 xl:mt-20 text-[#0202c7]";
   const inputsStyle = "border-b-[1px] bg-[#4C71AD] border-0 rounded-[25px] m-1 p-1 text-xs xl:text-base";
   const imageStyle = "w-[80%] mx-auto my-auto";
   const InfoText = `text-xs my-0.5 xl:text-lg xl:my-2 font-bold`
@@ -350,10 +357,24 @@ function App() {
       x: {
         grid: {
           display: false,
+        },
+        ticks: {
+          color: '#0202c7',
+          font: {
+            size: 16,
+            weight: 'bold'
+          },
         }
       },
       y: {
         borderWidth: 0,
+        ticks: {
+          color: '#0202c7',
+          font: {
+            size: 16,
+            weight: 'bold'
+          },
+        },
         grid: {
           display: false,
         },
@@ -363,50 +384,60 @@ function App() {
     },
   }
 
+  //
+
   return (
-    <div className={allStyle + " z-10"}>
-      <header className={`z-30  + ${gradientStyle}`}>
-        <img src={logo} alt={`logo of the website`} className={`h-[90%] p-1 xl:p-10 w-auto`} />
-      </header>
+      <div className={`${allStyle} ${bgImageStyle}  text-style-dark ${(firstDate.getHours() >= 6 && firstDate.getHours() <= 18) ? `weather-bg` : `weather-bg-dark`}`}>
+        <header className={`z-30`}>
+          <img src={logo} alt={`logo of the website`} className={`h-[90%] p-1 xl:p-10 w-auto`}/>
+        </header>
 
-      <main className={mainStyle}>
-        <div className={insideMainStyle}>
+        <main className={mainStyle}>
+          <div className={insideMainStyle}>
 
-          <div className={hourlyWeatherStyle}>
-            <img className={`my-auto`} src={dailyWeather.current[selectedDay]} alt={`average weather image`}/>
-            <div className={`p-2 my-auto xl:p-6 xl:h-[80%]`}>
-              <Line className={`w-[100%]`} data={lineChartData} options={chartStyle}/>
+            <div className={hourlyWeatherStyle}>
+              <img className={`my-auto`} src={dailyWeather.current[selectedDay]} alt={`average weather image`}/>
+              <div className={`p-2 my-auto xl:p-6 xl:h-[80%]`}>
+                <Line className={`w-[100%]`} data={lineChartData} options={chartStyle}/>
+              </div>
             </div>
-          </div>
 
-          <div className={weatherBoxStyle}>
-            {
-              buttonDates.current.map((date,index) => {
-                return (
-                    <button key={date} onClick={() => {changeDatePicked(date)}} className={`${weatherButtonStyle} ${firstDate.getDate() === date ? ` text-blue-700` : ``} ${selectedDay === date ? ` bg-[#4C71AD]` : ``}`}>
-                      <p>{date} - {buttonDays.current[index]}</p>
-                      <img className={imageStyle} src={dailyWeather.current[date]} alt={`icon of the weather of this date`}/>
-                      <p>{avgTemps.current[date]} °C</p>
-                    </button>
-                )
-              })
-            }
-          </div>
-
-          <div className={motorbikeStyle}>
-
-            <div className={selectDivStyle}>
-              <Select
-                  id={`motorbikeType`}
-                  classNames={inputsStyle}
-                  options={motorbikeTypeOptions}
-                  placeholder="Motorbike Type (Default: Street)"
-                  styles={reactSelectStyle}
-                  onChange={(e) => {setBikeType(e.value)}}
-                  isSearchable
-              />
+            <div className={weatherBoxStyle}>
+              {
+                buttonDates.current.map((date, index) => {
+                  return (
+                      <button key={date} onClick={() => {
+                        changeDatePicked(date)
+                      }}
+                              className={`${weatherButtonStyle} ${firstDate.getDate() === date ? ` text-blue-700` : ``} ${selectedDay === date ? ` bg-[#4C71AD]` : ``}`}>
+                        <div>
+                          <p className={`my-1`}>{date} - {buttonDays.current[index]}</p>
+                          <img className={imageStyle} src={dailyWeather.current[date]}
+                               alt={`icon of the weather of this date`}/>
+                          <p className={`my-1`}>{avgTemps.current[date]} °C</p>
+                        </div>
+                      </button>
+                  )
+                })
+              }
             </div>
-            <p className={InfoText}>Location (City):</p>
+
+            <div className={motorbikeStyle}>
+
+              <div className={selectDivStyle}>
+                <Select
+                    id={`motorbikeType`}
+                    classNames={inputsStyle}
+                    options={motorbikeTypeOptions}
+                    placeholder="Motorbike Type (Default: Street)"
+                    styles={reactSelectStyle}
+                    onChange={(e) => {
+                      setBikeType(e.value)
+                    }}
+                    isSearchable
+                />
+              </div>
+              <p className={InfoText}>Location (City):</p>
               <div className={selectDivStyle}>
                 <Select
                     id={`location1`}
@@ -419,28 +450,29 @@ function App() {
                 />
               </div>
 
-            <p className={dangerTextStyle}>Danger Levels:</p>
-            <img src={dangerImg} alt={`danger level meter image`} className={`mx-auto mb-2 max-w-[100px] xl:max-w-[300px]`} />
-            <div className={`flex w-full border-t border-[#848C9A]`}>
-              <p className={`self-start mr-auto ${InfoText}`}>Weather Conditions:</p>
-              <p className={`self-end ${InfoText}`}>{weatherConditionText}</p>
-            </div>
-            <div className={`flex w-full`}>
-              <p className={`self-start mr-auto ${InfoText}`}>Road Conditions:</p>
-              <p className={`self-end ${InfoText}`}>{roadConditionText}</p>
-            </div>
-            <div className={`flex w-full`}>
-              <p className={`self-start mr-auto ${InfoText}`}>Suggestion:</p>
-              <p className={`self-end ${InfoText}`}>{safetySuggestion}</p>
+              <p className={dangerTextStyle}>Danger Levels:</p>
+              <img src={dangerImg} alt={`danger level meter image`}
+                   className={`mx-auto mb-2 max-w-[100px] xl:max-w-[300px]`}/>
+              <div className={`flex w-full border-t border-[#848C9A]`}>
+                <p className={`self-start mr-auto ${InfoText}`}>Weather Conditions:</p>
+                <p className={`self-end ${InfoText}`}>{weatherConditionText}</p>
+              </div>
+              <div className={`flex w-full`}>
+                <p className={`self-start mr-auto ${InfoText}`}>Road Conditions:</p>
+                <p className={`self-end ${InfoText}`}>{roadConditionText}</p>
+              </div>
+              <div className={`flex w-full`}>
+                <p className={`self-start mr-auto ${InfoText}`}>Suggestion:</p>
+                <p className={`self-end ${InfoText}`}>{safetySuggestion}</p>
+              </div>
             </div>
           </div>
-        </div>
-      </main>
+        </main>
 
-      <footer className={`z-30  + ${gradientStyle}`}>
-        <p className={footerStyle}>all rights reserved</p>
-      </footer>
-    </div>
+        <footer className={`z-30`}>
+          <p className={footerStyle}>all rights reserved</p>
+        </footer>
+      </div>
   );
 }
 
