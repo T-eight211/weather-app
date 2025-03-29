@@ -13,6 +13,7 @@ import dangerLow from './images/dangerLow.png';
 import dangerMid from './images/dangerMid.png';
 import dangerHigh from './images/dangerHigh.png';
 import logo from './images/logo.png';
+import cities from "./cities.json";
 import { Line } from "react-chartjs-2"
 import {Chart as ChartJs, Legend, plugins, scales, Tooltip} from "chart.js/auto";
 
@@ -34,15 +35,22 @@ function App() {
   const dailyWeather = useRef({});
   const API_KEY = "718d0502e1fdf804f510f63140737137";
   // by default the lon and lat is londons
-  const LAT = "51.5072";
-  const LON = "0.1276";
+  const lat = useRef("51.5072");
+  const lon = useRef("0.1276");
+  const [selectedDay, setSelectedDay] = useState(firstDate.getDate().toString());
+  const [bikeType, setBikeType] = useState("street");
+  const [dangerImg, setDangerImg] = useState(dangerLow);
+  const [weatherConditionText, setWeatherConditionText] = useState("");
+  const [roadConditionText, setRoadConditionText] = useState("");
+  const [safetySuggestion, setSafetySuggestion] = useState("");
 
   const fetchWeatherData = async () => {
     try {
+      console.log(lat.current + " " + lon.current);
       const currentTime = Math.floor(Date.now() / 1000);
       const pastStart = currentTime - 3 * 24 * 60 * 60;
-      const forecastAPI = `https://pro.openweathermap.org/data/2.5/forecast/hourly?lat=${LAT}&lon=${LON}&appid=${API_KEY}&units=metric`;
-      const historicalAPI = `https://history.openweathermap.org/data/2.5/history/city?lat=${LAT}&lon=${LON}&type=hour&start=${pastStart}&end=${currentTime}&appid=${API_KEY}&units=metric`;
+      const forecastAPI = `https://pro.openweathermap.org/data/2.5/forecast/hourly?lat=${lat.current}&lon=${lon.current}&appid=${API_KEY}&units=metric`;
+      const historicalAPI = `https://history.openweathermap.org/data/2.5/history/city?lat=${lat.current}&lon=${lon.current}&type=hour&start=${pastStart}&end=${currentTime}&appid=${API_KEY}&units=metric`;
 
       const [forecastRes, historicalRes] = await Promise.all([
         axios.get(forecastAPI),
@@ -73,9 +81,6 @@ function App() {
         groupedWeathers[dateStr].push(condition);
       });
 
-      console.log(groupedWeathers);
-      console.log(buttonDays.current);
-      console.log(buttonDates.current);
       dayTemps.current = groupedTemps;
       dayWeathers.current = groupedWeathers;
       for (let key in dayWeathers.current) {
@@ -109,7 +114,7 @@ function App() {
     } catch (error) {
       console.error("Error fetching weather data:", error);
     }
-    changeDatePicked(firstDate.getDate());
+    changeDatePicked(firstDate.getDate().toString());
   };
 
   function getModalWeather(arr) {
@@ -154,6 +159,7 @@ function App() {
   }, []);
 
   const changeDatePicked = (date) => {
+    setSelectedDay(date);
     let labelH = [];
     for (let i = 24 - dayTemps.current[date].length; i < 24; i++) {
       labelH.push(i.toString().padStart(2, '0'));
@@ -174,17 +180,33 @@ function App() {
     });
   };
 
+
+
   // initiallizing state variables
-  const [locations,setLocations]= useState(["loaction",'location',"temp1",'temp1']); // change this
-  const locationOptions = locations.map(location => (
-    {value: location, label: location}
-  ));
+  const [locations, setLocations] = useState([]);
+
+  useEffect(() => {
+    setLocations(cities);
+  }, []);
+  const locationOptions = locations.map((city) => ({
+    value: city.name,
+    label: `${city.name}`,
+    lat: city.lat,
+    lon: city.lon
+  }));
+
+  const handleCityChange = (event) => {
+    lon.current = event.lon;
+    lat.current = event.lat;
+    fetchWeatherData();
+  }
+
   const motorbikeTypeOptions = [
-    { value: "1", label: "Sports" },
-    { value: "2", label: "Scooter" },
-    { value: "3", label: "Cruiser" },
-    { value: "4", label: "Off-road" },
-    { value: "5", label: "Street" },
+    { value: "Street", label: "Street" },
+    { value: "Sports", label: "Sports" },
+    { value: "Scooter", label: "Scooter" },
+    { value: "Cruiser", label: "Cruiser" },
+    { value: "Off-road", label: "Off-road" },
   ];
   const [lineChartData, setLineChartData] = useState({
     labels: [],
@@ -199,8 +221,75 @@ function App() {
       tension: 0.2
     }]
   });
-  const [selectedDay, setSelectedDay] = useState(firstDate.getDate().toString());
 
+// danger level conditions
+  useEffect(() => {
+    if (bikeType === "Street") {
+      if (dailyWeather.current[selectedDay] === img200 || dailyWeather.current[selectedDay] === img300 || dailyWeather.current[selectedDay] === img500 || dailyWeather.current[selectedDay] === img600 || dailyWeather.current[selectedDay] === img700) {
+        setDangerImg(dangerMid);
+      } else if (dailyWeather.current[selectedDay] === img800 || dailyWeather.current[selectedDay] === img801) {
+        setDangerImg(dangerLow);
+      }
+    } else if (bikeType === "Sports") {
+      if (dailyWeather.current[selectedDay] === img200 || dailyWeather.current[selectedDay] === img300 || dailyWeather.current[selectedDay] === img500 || dailyWeather.current[selectedDay] === img600 || dailyWeather.current[selectedDay] === img700) {
+        setDangerImg(dangerMid);
+      } else if (dailyWeather.current[selectedDay] === img800 || dailyWeather.current[selectedDay] === img801) {
+        setDangerImg(dangerLow);
+      }
+    } else if (bikeType === "Scooter") {
+      if (dailyWeather.current[selectedDay] === img200 || dailyWeather.current[selectedDay] === img300 || dailyWeather.current[selectedDay] === img500 || dailyWeather.current[selectedDay] === img600 || dailyWeather.current[selectedDay] === img700) {
+        setDangerImg(dangerHigh);
+      } else if (dailyWeather.current[selectedDay] === img800 || dailyWeather.current[selectedDay] === img801) {
+        setDangerImg(dangerMid);
+      }
+    } else if (bikeType === "Cruiser") {
+      if (dailyWeather.current[selectedDay] === img200 || dailyWeather.current[selectedDay] === img300 || dailyWeather.current[selectedDay] === img500 || dailyWeather.current[selectedDay] === img600 || dailyWeather.current[selectedDay] === img700) {
+        setDangerImg(dangerMid);
+      } else if (dailyWeather.current[selectedDay] === img800 || dailyWeather.current[selectedDay] === img801) {
+        setDangerImg(dangerLow);
+      }
+    } else if (bikeType === "Off-road") {
+      if (dailyWeather.current[selectedDay] === img200 || dailyWeather.current[selectedDay] === img300 || dailyWeather.current[selectedDay] === img500 || dailyWeather.current[selectedDay] === img600 || dailyWeather.current[selectedDay] === img700) {
+        setDangerImg(dangerMid);
+      } else if (dailyWeather.current[selectedDay] === img800 || dailyWeather.current[selectedDay] === img801) {
+        setDangerImg(dangerLow);
+      }
+    }
+
+    if (dailyWeather.current[selectedDay] === img200) {
+      setWeatherConditionText("Thunderstorm");
+      setRoadConditionText("Wet and slippery roads.");
+      setSafetySuggestion("Don't drive! Seek shelter and stay safe.");
+    } else if (dailyWeather.current[selectedDay] === img300) {
+      setWeatherConditionText("Light Rain with Sunshine");
+      setRoadConditionText("Slippery roads, exercise caution.");
+      setSafetySuggestion("Drive carefully, watch for puddles.");
+    } else if (dailyWeather.current[selectedDay] === img500) {
+      setWeatherConditionText("Rain");
+      setRoadConditionText("Wet and slippery roads.");
+      setSafetySuggestion("Drive carefully, reduce speed.");
+    } else if (dailyWeather.current[selectedDay] === img600) {
+      setWeatherConditionText("Snow");
+      setRoadConditionText("Snowy and slippery roads.");
+      setSafetySuggestion("Avoid driving if possible, or use snow chains.");
+    } else if (dailyWeather.current[selectedDay] === img700) {
+      setWeatherConditionText("Fog");
+      setRoadConditionText("Limited visibility, roads are tricky.");
+      setSafetySuggestion("Drive slowly with headlights on, stay cautious.");
+    } else if (dailyWeather.current[selectedDay] === img800) {
+      setWeatherConditionText("Sunny");
+      setRoadConditionText("Clear roads, great conditions.");
+      setSafetySuggestion("Perfect day for a ride, stay alert.");
+    } else if (dailyWeather.current[selectedDay] === img801) {
+      setWeatherConditionText("Clear Skies");
+      setRoadConditionText("Perfect road conditions.");
+      setSafetySuggestion("Enjoy the ride, but always stay cautious.");
+    } else {
+      setWeatherConditionText("Unknown weather condition");
+      setRoadConditionText("unknown conditions.");
+      setSafetySuggestion("Check the weather and be prepared for changes.");
+    }
+    }, [selectedDay,avgTemps.current,dailyWeather.current,bikeType]);
  
   // base styles 
   const allStyle = `h-screen min-h-[670px] min-w-[365px] grid grid-rows-[5%_90%_5%] xl:grid-rows-[20%_60%_20%] text-xs xl:text-3xl ${(firstDate.getHours() >= 6 && firstDate.getHours() <= 18) ? `bg-style-light text-style-dark` : `bg-style-dark text-style-dark`} `;
@@ -215,7 +304,7 @@ function App() {
   const gradientStyle = "";
   const inputsStyle = "border-b-[1px] bg-[#4C71AD] border-0 rounded-[25px] m-1 p-1 text-xs xl:text-base";
   const imageStyle = "w-[80%] mx-auto my-auto";
-  const InfoText = `text-base xl:text-xl xl:my-2 font-bold`
+  const InfoText = `text-xs my-0.5 xl:text-lg xl:my-2 font-bold`
   const selectDivStyle = `p-0`;
   const reactSelectStyle = {
     control: (provided) => ({
@@ -297,7 +386,7 @@ function App() {
                     <button key={date} onClick={() => {changeDatePicked(date)}} className={`${weatherButtonStyle} ${firstDate.getDate() === date ? ` text-blue-700` : ``} ${selectedDay === date ? ` bg-[#4C71AD]` : ``}`}>
                       <p>{date} - {buttonDays.current[index]}</p>
                       <img className={imageStyle} src={dailyWeather.current[date]} alt={`icon of the weather of this date`}/>
-                      <p>{avgTemps.current[date]}</p>
+                      <p>{avgTemps.current[date]} °C</p>
                     </button>
                 )
               })
@@ -308,54 +397,41 @@ function App() {
 
             <div className={selectDivStyle}>
               <Select
-                  id={`location1`}
+                  id={`motorbikeType`}
                   classNames={inputsStyle}
                   options={motorbikeTypeOptions}
-                  placeholder="Motorbike Type"
+                  placeholder="Motorbike Type (Default: Street)"
                   styles={reactSelectStyle}
+                  onChange={(e) => {setBikeType(e.value)}}
                   isSearchable
               />
             </div>
-            <p className={InfoText}>Destination:</p>
-            <div className={`grid grid-cols-2`}>
+            <p className={InfoText}>Location (City):</p>
               <div className={selectDivStyle}>
                 <Select
                     id={`location1`}
                     classNames={inputsStyle}
                     options={locationOptions}
-                    placeholder="From"
+                    placeholder="London"
                     styles={reactSelectStyle}
-                    isSearchable
-                />
-
-              </div>
-
-              <div className={selectDivStyle}>
-                <Select
-                    id={`location2`}
-                    classNames={inputsStyle}
-                    options={locationOptions}
-                    placeholder="To"
-                    styles={reactSelectStyle}
+                    onChange={handleCityChange}
                     isSearchable
                 />
               </div>
-            </div>
-
 
             <p className={dangerTextStyle}>Danger Levels:</p>
-            <img src={dangerLow} alt={`danger level meter image`} className={`mx-auto max-w-[100px] xl:max-w-[300px]`} />
+            <img src={dangerImg} alt={`danger level meter image`} className={`mx-auto mb-2 max-w-[100px] xl:max-w-[300px]`} />
             <div className={`flex w-full border-t border-[#848C9A]`}>
               <p className={`self-start mr-auto ${InfoText}`}>Weather Conditions:</p>
-              <p className={`self-end ${InfoText}`}>Cloudy</p>
+              <p className={`self-end ${InfoText}`}>{weatherConditionText}</p>
             </div>
             <div className={`flex w-full`}>
               <p className={`self-start mr-auto ${InfoText}`}>Road Conditions:</p>
-              <p className={`self-end ${InfoText}`}>Dry</p>
+              <p className={`self-end ${InfoText}`}>{roadConditionText}</p>
             </div>
             <div className={`flex w-full`}>
               <p className={`self-start mr-auto ${InfoText}`}>Suggestion:</p>
-              <p className={`self-end ${InfoText}`}>Helmet and gloves!</p>
+              <p className={`self-end ${InfoText}`}>{safetySuggestion}</p>
             </div>
           </div>
         </div>
