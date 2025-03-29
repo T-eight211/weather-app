@@ -105,7 +105,7 @@ function App() {
 
  
 
-
+const [locations1, setLocations] = useState(locationOptions); // State for first dropdown
 const [locations2, setLocations2] = useState(locationOptions); // State for second dropdown options
 
 
@@ -113,6 +113,14 @@ const [locations2, setLocations2] = useState(locationOptions); // State for seco
 const [isLocation2Enabled, setIsLocation2Enabled] = useState(false); //initially disabled second dropdown
 
 
+let handleLocationChange = (selectedOption) => {
+  // remove the selected option from the first dropdown
+  const filteredLocations = locations.filter((location) => location.label !== selectedOption.label);
+  setLocations(filteredLocations.map((location) => ({
+    value: location.value,
+    label: location.label,
+  })));
+}
 
 
 
@@ -284,7 +292,7 @@ let handleLocationChange2 = (selectedOption) => {
                 <Select
                     id={`location1`}
                     classNames={inputsStyle}
-                    options={locationOptions}
+                    options={locations1}
                     placeholder="From"
                     styles={reactSelectStyle}
                     isSearchable
@@ -302,6 +310,7 @@ let handleLocationChange2 = (selectedOption) => {
                     styles={reactSelectStyle}
                     isSearchable
                     isDisabled={!isLocation2Enabled}
+                    onChange={handleLocationChange}
                 />
               </div>
             </div>
