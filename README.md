@@ -13,6 +13,7 @@ The **Motorbike Weather Safety App** is an application that will help motorbike 
 ## Installation
 ### Prerequisites
 Ensure you have **Node.js** and **npm** installed on your system. If not, download and install from [Node.js official website](https://nodejs.org/en/download).
+Additionally, make sure you have a screen with a minimum width of 1080px or adjust your browser zoom to view the desktop version of the app.
 
 ### Steps
 #### **For Windows Users**

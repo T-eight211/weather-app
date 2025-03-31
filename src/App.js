@@ -311,42 +311,57 @@ function App() {
     }
 
     // Danger information Updating logic
-    if (averageDailyWeatherCondition.current[selectedDay] === ThunderIcon) {
+    if (averageDailyWeatherCondition.current[selectedDay] === ThunderIcon)
+    {
       setBgImageStyle(' thunder ');
       setWeatherConditionText("Thunderstorm");
       setRoadConditionText("Wet and slippery roads.");
       setSafetySuggestion("Don't drive! Seek shelter and stay safe.");
-    } else if (averageDailyWeatherCondition.current[selectedDay] === LightRainIcon) {
+    }
+    else if (averageDailyWeatherCondition.current[selectedDay] === LightRainIcon)
+    {
       setBgImageStyle(' lightRain ');
       setWeatherConditionText("Light Rain with Sunshine");
       setRoadConditionText("Slippery roads, exercise caution.");
       setSafetySuggestion("Drive carefully, watch for puddles.");
-    } else if (averageDailyWeatherCondition.current[selectedDay] === RainIcon) {
+    }
+    else if (averageDailyWeatherCondition.current[selectedDay] === RainIcon)
+    {
       setBgImageStyle(' rain ');
       setWeatherConditionText("Rain");
       setRoadConditionText("Wet and slippery roads.");
       setSafetySuggestion("Drive carefully, reduce speed.");
-    } else if (averageDailyWeatherCondition.current[selectedDay] === SnowIcon) {
+    }
+    else if (averageDailyWeatherCondition.current[selectedDay] === SnowIcon)
+    {
       setBgImageStyle(' snow ');
       setWeatherConditionText("Snow");
       setRoadConditionText("Snowy and slippery roads.");
       setSafetySuggestion("Avoid driving if possible, or use snow chains.");
-    } else if (averageDailyWeatherCondition.current[selectedDay] === FogIcon) {
+    }
+    else if (averageDailyWeatherCondition.current[selectedDay] === FogIcon)
+    {
       setBgImageStyle(' fog ');
       setWeatherConditionText("Fog");
       setRoadConditionText("Limited visibility, roads are tricky.");
       setSafetySuggestion("Drive slowly with headlights on, stay cautious.");
-    } else if (averageDailyWeatherCondition.current[selectedDay] === SunnyIcon) {
+    }
+    else if (averageDailyWeatherCondition.current[selectedDay] === SunnyIcon)
+    {
       setBgImageStyle(' sunny ');
       setWeatherConditionText("Sunny");
       setRoadConditionText("Clear roads, great conditions.");
       setSafetySuggestion("Perfect day for a ride, stay alert.");
-    } else if (averageDailyWeatherCondition.current[selectedDay] === CloudyIcon) {
+    }
+    else if (averageDailyWeatherCondition.current[selectedDay] === CloudyIcon)
+    {
       setBgImageStyle(' clear ');
       setWeatherConditionText("Clear Skies");
       setRoadConditionText("Perfect road conditions.");
       setSafetySuggestion("Enjoy the ride, but always stay cautious.");
-    } else {
+    }
+    else
+    {
       console.log("danger info error")
     }
   }
@@ -442,6 +457,13 @@ function App() {
         },
         suggestedMin: Math.min(...lineChartData.datasets[0].data) - 1,
         suggestedMax: Math.max(...lineChartData.datasets[0].data) + 1,
+      },
+    },
+    plugins: {
+      legend: {
+        labels: {
+          color: '#0202c7',  // Change the legend label color here
+        },
       },
     },
   }
