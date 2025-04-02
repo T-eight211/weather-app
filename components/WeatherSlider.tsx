@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import Navigation from "@/components/Navigation";
 
 const videoPaths = ["/rain.mp4", "/cloud.mp4", "/sun.mp4"];
 
@@ -67,8 +66,7 @@ const WeatherSlider: React.FC = () => {
         );
       })}
 
-      {/* Progress bar */}
-      <Navigation progress={progress} />
+
     </div>
   );
 };
