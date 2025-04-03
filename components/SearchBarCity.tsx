@@ -14,8 +14,8 @@ import { useEffect, useState } from "react";
 type Place = {
   name: string;
   place_id: string;
-  lat?: number;
-  lng?: number;
+  lat: number;
+  lng: number;
 };
 
 type Props = {
@@ -23,7 +23,7 @@ type Props = {
 };
 
 export default function SearchBarCity({ onSelect }: Props) {
-  const [predictions, setPredictions] = useState<Place[]>([]);
+  const [predictions, setPredictions] = useState<any[]>([]);
   const [input, setInput] = useState("");
 
   useEffect(() => {

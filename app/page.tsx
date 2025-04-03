@@ -20,7 +20,7 @@ type Place = {
 };
 
 const Page: React.FC = () => {
-  const [selectedCity, setSelectedCity] = useState<Place>({
+  const [selectedCity, setSelectedCity] = useState<any>({
     name: "London, UK",
     place_id: "london_default", // You can use a placeholder or real place_id
     lat: 51.5074,
