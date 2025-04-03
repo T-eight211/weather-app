@@ -27,7 +27,7 @@ const ForecastCard: React.FC<ForecastProps> = ({
   const width = (max - min) * scale;
 
   return (
-    <div className="bg-custom-my-colour flex items-center justify-between  py-2 border-b border-white/10">
+    <div className="flex items-center justify-between  py-2 border-b border-white/10">
       {/* Day */}
       <div className="w-20 text-white text-sm font-medium">{day}</div>
 

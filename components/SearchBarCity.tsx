@@ -40,34 +40,36 @@ export default function SearchBarCity({ onSelect }: Props) {
 
   return (
     <>
-    <div className="relative">
-      <Command>
-        <CommandInput
-          placeholder="Search your city..."
-          value={input}
-          onValueChange={setInput}
-        />
+    <div className="col-span-1 sm:col-span-2 lg:col-span-3">
+      <div className="relative">
+        <Command>
+          <CommandInput
+            placeholder="Search your city..."
+            value={input}
+            onValueChange={setInput}
+          />
 
-        {input && predictions.length > 0 && (
-          <div className="absolute top-full  w-full z-50 bg-white border rounded-md shadow-md mt-1">
-            <CommandList>
-              <CommandGroup heading="Suggestions">
-                {predictions.map((prediction) => (
-                  <CommandItem
-                    key={prediction.place_id}
-                    className="cursor-pointer"
-                    onSelect={() => handleSelect(prediction.description)}
-                  >
-                    {prediction.description}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </CommandList>
-          </div>
-        )}
+          {input && predictions.length > 0 && (
+            <div className="absolute top-full  w-full z-50 bg-white border rounded-md shadow-md mt-1">
+              <CommandList>
+                <CommandGroup heading="Suggestions">
+                  {predictions.map((prediction) => (
+                    <CommandItem
+                      key={prediction.place_id}
+                      className="cursor-pointer"
+                      onSelect={() => handleSelect(prediction.description)}
+                    >
+                      {prediction.description}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </div>
+          )}
 
-        <CommandSeparator />
-      </Command>
+          <CommandSeparator />
+        </Command>
+      </div>
     </div>
     {/* <Button variant="outline" className="cursor-pointer"
       onClick={() => {

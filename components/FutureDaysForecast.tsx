@@ -35,8 +35,8 @@ const FutureDaysForecast: React.FC<FutureDaysForecastProps> = ({ forecast }) => 
 
   return (
     <div className="bg-custom-my-colour px-4 rounded-2xl">
-      <div className="bg-custom-my-colour flex items-center py-2 border-b border-white/10 gap-2">
-        <div className="w-7 h-7 flex items-center justify-center">
+      <div className="flex items-center py-2 border-b border-white/10 gap-2">
+        <div className="w-4 h-7 flex items-center justify-center">
           <Image src='./calendar.svg' alt="weather icon" width={16} height={16} />
         </div>
         <h2 className="w-40 text-white text-sm font-medium">10-DAY FORECAST</h2>

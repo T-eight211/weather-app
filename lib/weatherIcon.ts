@@ -35,8 +35,7 @@ export function getWeatherIcon(condition: string, iconCode: string): string {
       return isNight ? "moon.stars.fill.svg" : "sun.max.fill.svg";
 
     case "clouds":
-      console.log("Icon Code:", iconCode); // Debugging line
-      console.log("Is Night:", isNight); // Debugging line
+    
       // Use more subtle icons for night
       return isNight ? "cloud.moon.fill.svg" : "cloud.sun.fill.svg";
 

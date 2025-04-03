@@ -20,10 +20,12 @@ module.exports = {
       },
       colors: {
         custom: {
-          'my-colour': '#242e47', // ✅ Custom color correctly placed
+          'my-colour': 'rgba(36, 46, 71, 0.95)', 
         },
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar'),
+  ],
 };

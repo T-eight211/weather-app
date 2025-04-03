@@ -20,7 +20,7 @@ const WeatherCard: React.FC<WeatherCardProps> = ({
   description
 }) => {
   return (
-    <div className="rounded-2xl bg-[#242e47] text-white flex flex-col items-center justify-center text-center p-5">
+    <>
       {/* City */}
       <h1 className="text-4xl xl:text-6xl font-semibold mb-2">{city}</h1>
 
@@ -39,7 +39,7 @@ const WeatherCard: React.FC<WeatherCardProps> = ({
         <span>H:{Math.round(temp_max)}°</span>
         <span>L:{Math.round(temp_min)}°</span>
       </div>
-    </div>
+    </>
   );
 };
 
