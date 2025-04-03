@@ -1,9 +1,11 @@
 "use client";
 
-import React from 'react';
+
 import HourlyWeatherCard from './HourlyWeatherCard';
 import { getWeatherIcon } from '@/lib/weatherIcon';
 import Image from 'next/image';
+import React, { JSX } from 'react';
+
 
 type HourlyForecastEntry = {
   dt: number;

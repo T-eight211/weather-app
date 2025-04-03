@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 type WindCardProps = {
   windSpeed: number;      // e.g., 9
-  windGust: number;       // e.g., 23
+  windGust: string;       // e.g., 23
   windDeg: number;        // e.g., 59
 };
 
@@ -37,11 +37,11 @@ const WindCard: React.FC<WindCardProps> = ({ windSpeed, windGust, windDeg }) => 
         <div className="flex flex-col w-full mr-5 ">
           <div className="flex justify-between  border-b border-white/20 py-3">
             <span className="text-sm">Wind</span>
-            <span className="text-sm font-medium">{Math.round(windSpeed)} mph</span>
+            <span className="text-sm font-medium">{windSpeed} mph</span>
           </div>
           <div className="flex justify-between  border-b border-white/20 py-3">
             <span className="text-sm">Gusts</span>
-            <span className="text-sm font-medium">{Math.round(windGust)} mph</span>
+            <span className="text-sm font-medium">{windGust} mph</span>
           </div>
           <div className="flex justify-between py-3">
             <span className="text-sm">Direction</span>

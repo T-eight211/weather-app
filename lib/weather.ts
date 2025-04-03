@@ -2,6 +2,8 @@ const API_KEY = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
 const BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
 const FORECAST_BASE_URL = "https://api.openweathermap.org/data/2.5/forecast/daily";
 const HOURLY_FORECAST_BASE_URL = "https://pro.openweathermap.org/data/2.5/forecast/hourly";
+const ONECALL_BASE_URL = "https://api.openweathermap.org/data/3.0/onecall";
+
 
 
 export async function getCurrentWeather(city: string) {
@@ -24,6 +26,9 @@ export async function getCurrentWeather(city: string) {
 
   return {
     city: data.name,
+    // latitude and longitude
+    lat: data.coord.lat,
+    lon: data.coord.lon,
     temperature: data.main.temp,
     temp_min: data.main.temp_min,
     temp_max: data.main.temp_max,
@@ -105,4 +110,21 @@ export async function getHourlyForecast(city: string, hours: number = 23): Promi
     timezoneOffset: data.city.timezone, // make sure this field exists
     hourly: formattedHourly,
   };
+}
+
+
+export async function getOneCallData(lat: number, lon: number): Promise<any> {
+  if (!API_KEY) {
+    throw new Error("Missing OpenWeather API key");
+  }
+
+  const url = `${ONECALL_BASE_URL}?lat=${lat}&lon=${lon}&exclude=hourly,daily,alerts&units=metric&appid=${API_KEY}`;
+
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch One Call API data: ${res.statusText}`);
+  }
+
+  const data = await res.json();
+  return data;
 }

@@ -1,6 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button"
-
 import {
   Command,
   CommandEmpty,
@@ -11,35 +9,39 @@ import {
   CommandSeparator,
 } from "@/components/ui/command";
 import { autocomplete } from "@/lib/google";
-import { PlaceAutocompleteResult } from "@googlemaps/google-maps-services-js";
 import { useEffect, useState } from "react";
 
+type Place = {
+  name: string;
+  place_id: string;
+  lat: number;
+  lng: number;
+};
+
 type Props = {
-  onSelect: (value: string) => void;
+  onSelect: (place: Place) => void;
 };
 
 export default function SearchBarCity({ onSelect }: Props) {
-  const [predictions, setPredictions] = useState<PlaceAutocompleteResult[]>([]);
+  const [predictions, setPredictions] = useState<Place[]>([]);
   const [input, setInput] = useState("");
 
   useEffect(() => {
     const fetchPredictions = async () => {
       if (!input) return setPredictions([]);
-      const predictions = await autocomplete(input);
-      setPredictions(predictions ?? []);
+      const results = await autocomplete(input);
+      setPredictions(results ?? []);
     };
     fetchPredictions();
   }, [input]);
 
-  const handleSelect = (description: string) => {
-    console.log("handleSelect triggered with:", description); // ✅ debug
-    setInput(description);                  // Clears input after selection
-    setPredictions([]);           // Hides dropdown
-    onSelect(description);        // Pass selected city to parent
+  const handleSelect = (place: Place) => {
+    setInput(place.name);
+    setPredictions([]);
+    onSelect(place);
   };
 
   return (
-    <>
     <div className="col-span-1 sm:col-span-2 lg:col-span-3">
       <div className="relative">
         <Command>
@@ -48,39 +50,26 @@ export default function SearchBarCity({ onSelect }: Props) {
             value={input}
             onValueChange={setInput}
           />
-
           {input && predictions.length > 0 && (
-            <div className="absolute top-full  w-full z-50 bg-white border rounded-md shadow-md mt-1">
+            <div className="absolute top-full w-full z-50 bg-white border rounded-md shadow-md mt-1">
               <CommandList>
                 <CommandGroup heading="Suggestions">
-                  {predictions.map((prediction) => (
+                  {predictions.map((place) => (
                     <CommandItem
-                      key={prediction.place_id}
+                      key={place.place_id}
                       className="cursor-pointer"
-                      onSelect={() => handleSelect(prediction.description)}
+                      onSelect={() => handleSelect(place)}
                     >
-                      {prediction.description}
+                      {place.name}
                     </CommandItem>
                   ))}
                 </CommandGroup>
               </CommandList>
             </div>
           )}
-
           <CommandSeparator />
         </Command>
       </div>
     </div>
-    {/* <Button variant="outline" className="cursor-pointer"
-      onClick={() => {
-        console.log("Button clicked with input:", input); // ✅ debug
-        if (input.trim()) {
-          handleSelect(input.trim());
-        }
-      }}
-    >
-    
-      Search</Button> */}
-    </>
   );
 }

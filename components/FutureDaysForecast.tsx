@@ -34,7 +34,7 @@ const FutureDaysForecast: React.FC<FutureDaysForecastProps> = ({ forecast }) => 
   };
 
   return (
-    <div className="bg-custom-my-colour px-4 rounded-2xl">
+    <>
       <div className="flex items-center py-2 border-b border-white/10 gap-2">
         <div className="w-4 h-7 flex items-center justify-center">
           <Image src='./calendar.svg' alt="weather icon" width={16} height={16} />
@@ -55,7 +55,7 @@ const FutureDaysForecast: React.FC<FutureDaysForecastProps> = ({ forecast }) => 
           actualMax={actualMax}
         />
       ))}
-    </div>
+    </>
   );
 };
 
