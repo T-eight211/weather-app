@@ -14,8 +14,8 @@ import { useEffect, useState } from "react";
 type Place = {
   name: string;
   place_id: string;
-  lat: number;
-  lng: number;
+  lat?: number;
+  lng?: number;
 };
 
 type Props = {
