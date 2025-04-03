@@ -2,6 +2,8 @@
 
 import { Client } from "@googlemaps/google-maps-services-js";
 
+import { PlaceAutocompleteType } from "@googlemaps/google-maps-services-js";
+
 const client = new Client();
 
 export const autocomplete = async (input: string) => {
@@ -11,7 +13,7 @@ export const autocomplete = async (input: string) => {
     const response = await client.placeAutocomplete({
       params: {
         input,
-        types: ["(cities)"],
+        types: PlaceAutocompleteType.cities,
         key: process.env.GOOGLE_API_KEY!,
       },
     });
