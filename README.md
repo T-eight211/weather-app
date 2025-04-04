@@ -56,7 +56,6 @@ You can start modifying the app from `app/page.tsx`. Changes will be auto-reflec
 
 - 🔍 City search with Google Places Autocomplete
 - 🌡️ Current, hourly, and daily weather forecasts
-- 🧠 AI-generated danger level for travel (car, bike, motorcycle, walk)
 - 🎥 Animated weather background videos (day/night aware)
 - 📊 Rain prediction visualization (next 60 minutes)
 
