@@ -2,18 +2,20 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
+// landing annimation shown only once every 24 hours uses local storage to understand if the user has seen it. hide it after 2.4 seconds
+
 const LandingSplash = () => {
-  const [show, setShow] = useState(false); // Default to hidden
+  const [show, setShow] = useState(false); 
 
   useEffect(() => {
     const lastShown = localStorage.getItem("landingShown");
     const now = new Date().getTime();
-    const oneDay = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+    const oneDay = 24 * 60 * 60 * 1000;
 
     if (!lastShown || now - parseInt(lastShown) > oneDay) {
       setShow(true);
-      localStorage.setItem("landingShown", now.toString()); // Save timestamp
-      setTimeout(() => setShow(false), 2400); // Auto-hide after 2.4 seconds
+      localStorage.setItem("landingShown", now.toString());
+      setTimeout(() => setShow(false), 2400); 
     }
   }, []);
 

@@ -1,29 +1,52 @@
+// after getting the weather data from the API, we will pass the condition and iconCode to this component. based on the condition and iconCode, we will get the video source and play it. the video will be reset every time the condition or iconCode changes. the progress of the video will be set to 0 every time the condition or iconCode changes. the video will play for 7 seconds and then reset to 0. if the video is at 100% progress, it will reset to 0 and play again.
+
+
 "use client";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 
-const videoPaths = ["/rain.mp4", "/cloud.mp4", "/sun.mp4"];
+type WeatherSliderProps = {
+  condition: string;
+  iconCode: string; // To determine day/night
+};
 
-const WeatherSlider: React.FC = () => {
-  const [current, setCurrent] = useState(0);
+const WeatherSlider: React.FC<WeatherSliderProps> = ({ condition, iconCode }) => {
   const [progress, setProgress] = useState(0);
-  const [sliding, setSliding] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   const SLIDE_DURATION = 7000;
 
-  // Refs to all videos
-  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const isNight = iconCode?.endsWith("n");
 
-  const nextSlide = useCallback(() => {
-    if (sliding) return;
-    setSliding(true);
-    setCurrent((prev) => (prev + 1) % videoPaths.length);
-    setTimeout(() => setSliding(false), 700);
-  }, [sliding]);
+
+  const getVideoSrc = () => {
+    const lower = condition.toLowerCase();
+    if (isNight) return "/night.mp4";
+    if (lower.includes("thunderstorm")) return "/thunderstorm.mp4";
+    if (lower.includes("drizzle") || lower.includes("rain")) return "/rain.mp4";
+    if (lower.includes("snow")) return "/snow.mp4";
+    if (lower.includes("clear")) return "/sun.mp4";
+    if (lower.includes("cloud")) return "/cloud.mp4";
+    return "/cloud.mp4"; // Fallback
+  };
+
+
+
+  const resetVideo = useCallback(() => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().catch(() => {});
+    }
+  }, []);
+
+  useEffect(() => {
+    resetVideo();
+    setProgress(0);
+  }, [condition, iconCode, resetVideo]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
-          nextSlide();
+          resetVideo();
           return 0;
         }
         return prev + 100 / (SLIDE_DURATION / 100);
@@ -31,44 +54,22 @@ const WeatherSlider: React.FC = () => {
     }, 100);
 
     return () => clearInterval(interval);
-  }, [nextSlide]);
-
-  useEffect(() => {
-    setProgress(0);
-
-    // Reset current video to start from 0
-    const currentVideo = videoRefs.current[current];
-    if (currentVideo) {
-      currentVideo.currentTime = 0;
-      currentVideo.play().catch(() => {
-        // Autoplay might be blocked on some devices until interaction
-      });
-    }
-  }, [current]);
+  }, [resetVideo]);
 
   return (
     <div className="fixed inset-0 -z-10">
-      {videoPaths.map((path, index) => {
-        const isActive = index === current;
-        return (
-          <video
-            key={path}
-            ref={(el) => { videoRefs.current[index] = el; }}
-            src={path}
-            autoPlay
-            muted
-            playsInline
-            loop={false}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-              isActive ? "opacity-100" : "opacity-0"
-            }`}
-          />
-        );
-      })}
-
-
+      <video
+        ref={videoRef}
+        src={getVideoSrc()}
+        autoPlay
+        muted
+        playsInline
+        loop={false}
+        className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 opacity-100 filter brightness-[0.7]"
+      />
     </div>
   );
 };
 
 export default WeatherSlider;
+

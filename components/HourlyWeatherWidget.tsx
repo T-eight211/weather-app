@@ -18,9 +18,10 @@ type Props = {
   hourly: HourlyForecastEntry[];
   sunrise: number;
   sunset: number;
-  timezoneOffset: number; // ⏰ Offset in seconds from UTC
-  temperature: number;     // 🌡️ Current temperature for "Now"
-  condition: string;       // 🌤️ Current condition for "Now"
+  timezoneOffset: number; 
+  temperature: number;    
+  condition: string;       
+  icon: string;         
 };
 
 // Convert timestamp + offset to HH format
@@ -46,14 +47,15 @@ const HourlyWeatherWidget: React.FC<Props> = ({
   sunset,
   timezoneOffset,
   temperature,
-  condition
+  condition,
+  icon,
 }) => {
   const sunriseHour = getHour(sunrise, timezoneOffset);
   const sunsetHour = getHour(sunset, timezoneOffset);
   const result: JSX.Element[] = [];
 
-  // 🌟 "Now" Card
-  const nowIconPath = `/${getWeatherIcon(condition, "")}`;
+  // "Now" Card
+  const nowIconPath = `/${getWeatherIcon(condition, icon)}`;
   result.push(
     <HourlyWeatherCard
       key="now"
@@ -63,7 +65,7 @@ const HourlyWeatherWidget: React.FC<Props> = ({
     />
   );
 
-  // ⏱️ Next hourly forecast (skipping "Now")
+  //  Next hourly forecast (skipping "Now")
   hourly.forEach((entry) => {
     const hour = getHour(entry.dt, timezoneOffset);
     const iconPath = `/${getWeatherIcon(entry.condition, entry.icon)}`;
@@ -80,7 +82,7 @@ const HourlyWeatherWidget: React.FC<Props> = ({
       />
     );
 
-    // 🌅 Sunrise
+    // Sunrise
     if (sunriseHour === hour) {
       result.push(
         <HourlyWeatherCard
@@ -92,7 +94,7 @@ const HourlyWeatherWidget: React.FC<Props> = ({
       );
     }
 
-    // 🌇 Sunset
+    // Sunset
     if (sunsetHour === hour) {
       result.push(
         <HourlyWeatherCard

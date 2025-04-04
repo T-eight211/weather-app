@@ -10,8 +10,20 @@ import DangerLevelGauge from '@/components/DangerLevelCard';
 import HourlyWeatherWidget from "@/components/HourlyWeatherWidget";
 import WindCard from "@/components/WindCard";
 import RainForecastCard from "@/components/RainForecastCard";
+import { calculateDanger } from "@/lib/danger";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+} from "@/components/ui/alert-dialog";
 
-// 🔸 Type for the selected place from search
+
+// object to store the selected city returned from the search bar after calling google places api
 type Place = {
   name: string;
   place_id: string;
@@ -40,14 +52,16 @@ const Page: React.FC = () => {
   const forecastRef = useRef<HTMLDivElement>(null);
   const [forecastHeight, setForecastHeight] = useState<number>(0);
 
-  const dummyRainData = Array.from({ length: 60 }, () => Math.floor(Math.random() * 100));
+  const [selectedMode, setSelectedMode] = useState<string>("car");
+  const [dangerLevel, setDangerLevel] = useState<number>(0);
+  // messages for the danger level
+  const [messages, setMessages] = useState<string[]>([]);
 
-  useEffect(() => {
-    if (forecastRef.current) {
-      setForecastHeight(forecastRef.current.offsetHeight);
-    }
-  }, [forecastData]);
+  const [showErrorDialog, setShowErrorDialog] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+
+  // listenning for the selected city from the search bar then call the weather api and set the data so that can be used in the components
   useEffect(() => {
     const fetchWeather = async () => {
       if (!selectedCity) return;
@@ -78,17 +92,59 @@ const Page: React.FC = () => {
         console.log("Current Rain Data:", oneCallData.current.rain);
       } catch (error) {
         console.error("Error fetching weather data:", error);
+        setShowErrorDialog(true);
       }
     };
   
     fetchWeather();
   }, [selectedCity]);
 
+  // set the height of the forecast card to be the same as the weather card to keep the design consistent and responsive
+  useEffect(() => {
+    if (forecastRef.current) {
+      setForecastHeight(forecastRef.current.offsetHeight);
+    }
+  }, [forecastData]);
+
+
+  // listen for the one call data and trasnsport mode to be changed then call the calculateDanger function to get the danger level and messages
+  useEffect(() => {
+    if (!oneCallData || !selectedMode) return;  
+    const result = calculateDanger(oneCallData, selectedMode);
+    setMessages([]);
+    setDangerLevel(result.danger);
+    setMessages(result.messages);
+  }, [oneCallData, selectedMode]);
+  
+
   return (
     <>
+      {/* Landing annimation*/}
       <LandingSplash />
-      <WeatherSlider />
 
+      {/* background video to match current weather */}
+      <WeatherSlider
+        condition={weatherData?.condition || ""}
+        iconCode={weatherData?.icon || ""}
+      />
+      
+      {/* if openweather api does not have access to weather data for a certain locaiton  then an alert popup will be shown*/}
+      <AlertDialog open={showErrorDialog} onOpenChange={setShowErrorDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Something went wrong</AlertDialogTitle>
+            <AlertDialogDescription>
+              {"Weather data is not available for this location."}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setShowErrorDialog(false)}>Close</AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      
+      {/* Main content */}
+      {/* rendering all the components  */}
       <div className="flex items-center px-8 py-4">
         <div className="max-w-7xl w-full mx-auto grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 
@@ -117,7 +173,12 @@ const Page: React.FC = () => {
             className="bg-custom-my-colour px-4 rounded-2xl h-full flex flex-col"
             style={{ height: forecastHeight }}
           >
-            <DangerLevelGauge value={20} />
+            <DangerLevelGauge
+              value={dangerLevel}
+              messages={messages}
+              selectedValue={selectedMode}
+              onChange={setSelectedMode}
+            />
           </div>
 
           <div className="bg-custom-my-colour rounded-2xl px-4">
@@ -129,6 +190,7 @@ const Page: React.FC = () => {
                 timezoneOffset={hourlyForecastData.timezoneOffset}
                 temperature={weatherData.temperature}
                 condition={weatherData.condition}
+                icon={weatherData.icon}
               />
             )}
           </div>
@@ -156,10 +218,7 @@ const Page: React.FC = () => {
           )}
 
           </div>
-          
-
-          <div className="bg-black text-white p-4">siuu</div>
-          <div className="bg-black text-white p-4">siuu</div>
+        
         </div>
       </div>
     </>

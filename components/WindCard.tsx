@@ -1,3 +1,7 @@
+// after getting the weather data from api, this component will get the wind information, calculate compass direction based on the wind degree and display the wind speed, gusts and direction. it will also display a compass with the wind direction.
+
+
+
 import React from 'react';
 import WindDirectionCompass from './WindDirectionCompass';
 import Image from 'next/image';

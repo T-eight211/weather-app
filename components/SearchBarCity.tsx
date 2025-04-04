@@ -11,6 +11,10 @@ import {
 import { autocomplete } from "@/lib/google";
 import { useEffect, useState } from "react";
 
+// object to store the selected city returned from the search bar after calling google places api
+// the suggestions are returned from the google places api
+// the autocomplete function is called in the useEffect hook when the input changes
+
 type Place = {
   name: string;
   place_id: string;
@@ -37,8 +41,10 @@ export default function SearchBarCity({ onSelect }: Props) {
 
   const handleSelect = (place: Place) => {
     setInput(place.name);
-    setPredictions([]);
     onSelect(place);
+    setTimeout(() => {
+      setPredictions([]);
+    }, 900);
   };
 
   return (

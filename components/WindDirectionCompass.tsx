@@ -1,3 +1,6 @@
+// this is a react compass ui component that takes wind speed which is desplayed in the middle and direction using an arrow, we do a bit of mathematics to basically get the position where the arrow should be so assuming its a circle, we know the point in circumference using maths we can find the coordinates of the point in the circle and then we rotate the arrow to that point.
+
+
 import React from "react";
 
 interface WindDirectionCompassProps {

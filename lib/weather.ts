@@ -1,3 +1,8 @@
+// Weather API functions
+// here we have all the api calls so we get the current weather or the current weather card and wind card, we get daily weather for the next 10 days for the future forecast card. we get hourly weather for the next 24 hours for the hourly forecast card. onecall api returns everything in one go, but calls are limited. that is called to get minetely rainfall and also used for dangerlevel calculation. everything is called using city name. onecall api can only be called using coordinates. the problem is when you call by city name it only returns a city weather data in one country for example london, uk and london, canada it will get info london, uk
+
+
+
 const API_KEY = process.env.NEXT_PUBLIC_WEATHER_API_KEY;
 const BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
 const FORECAST_BASE_URL = "https://api.openweathermap.org/data/2.5/forecast/daily";
@@ -36,6 +41,7 @@ export async function getCurrentWeather(city: string) {
     humidity: data.main.humidity,
     condition: data.weather[0].main,
     description: data.weather[0].description,
+    icon: data.weather[0].icon,
     // wind speed
     windSpeed: data.wind.speed,
     windGust: data.wind.gust,
@@ -118,7 +124,7 @@ export async function getOneCallData(lat: number, lon: number): Promise<any> {
     throw new Error("Missing OpenWeather API key");
   }
 
-  const url = `${ONECALL_BASE_URL}?lat=${lat}&lon=${lon}&exclude=hourly,daily,alerts&units=metric&appid=${API_KEY}`;
+  const url = `${ONECALL_BASE_URL}?lat=${lat}&lon=${lon}&exclude=daily,alerts&units=metric&appid=${API_KEY}`;
 
   const res = await fetch(url);
   if (!res.ok) {

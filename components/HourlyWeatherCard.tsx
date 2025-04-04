@@ -2,9 +2,9 @@ import React from 'react';
 import Image from 'next/image';
 
 type HourlyWeatherCardProps = {
-  hour: string;        // e.g. "14"
-  icon: string;        // e.g. "/wind.svg"
-  temperature: string; // e.g. 15
+  hour: string;        
+  icon: string;      
+  temperature: string; 
 };
 
 const HourlyWeatherCard: React.FC<HourlyWeatherCardProps> = ({

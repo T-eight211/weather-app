@@ -1,4 +1,6 @@
 // /lib/weatherIcon.ts
+// This file contains a function to map weather conditions to icon names.
+// the weather api returns a weather condition and an icon code. these are used to display the most appropriate icon for the weather condition. for example rain and icon code has d in it meaning night then it will show moon and rain
 
 export function getWeatherIcon(condition: string, iconCode: string): string {
   const isNight = iconCode.endsWith("n");

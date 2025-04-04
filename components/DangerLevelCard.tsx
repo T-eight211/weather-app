@@ -1,19 +1,26 @@
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react';
 import GaugeComponent from './ui/gauge-chart';
 import TransportCombobox from "@/components/ui/combobox";
 import Image from 'next/image';
 
 type DangerLevelGaugeProps = {
   value: number;
+  messages: string[];
+  selectedValue: string;
+  onChange: (mode: string) => void;
 };
 
-const DangerLevelGauge: React.FC<DangerLevelGaugeProps> = ({ value }) => {
-  const [selectedValue, setSelectedValue] = useState("");
-
+const DangerLevelGauge: React.FC<DangerLevelGaugeProps> = ({
+  value,
+  messages,
+  selectedValue,
+  onChange
+}) => {
   return (
     <>
+      {/* Header */}
       <div className="flex items-center py-2 gap-2">
         <div className="w-4 h-7 flex items-center justify-center">
           <Image src="/exclamationmark.triangle.fill.svg" alt="danger icon" width={16} height={16} />
@@ -21,24 +28,25 @@ const DangerLevelGauge: React.FC<DangerLevelGaugeProps> = ({ value }) => {
         <h2 className="w-40 text-white text-sm font-medium">DANGER LEVEL</h2>
       </div>
 
-
-      <div className='flex justify-end'>
-      <TransportCombobox
-        options={[
-          { value: "walk", label: "🚶 Walking" },
-          { value: "bike", label: "🚴 Bicycle" },
-          { value: "car", label: "🚗 Car" },
-          { value: "motorcycle", label: "🛵 Motorcycle" },
-        ]}
-        placeholder="Select Transport"
-        searchPlaceholder="Search transport..."
-        emptyMessage="No transport found."
-        value={selectedValue}
-        onChange={setSelectedValue}
-      />
+      {/* Combobox */}
+      <div className="flex justify-end">
+        <TransportCombobox
+          options={[
+            { value: "walking", label: "🚶 Walking" },
+            { value: "bicycle", label: "🚴 Bicycle" },
+            { value: "car", label: "🚗 Car" },
+            { value: "motorcycle", label: "🛵 Motorcycle" },
+          ]}
+          placeholder="Select Transport"
+          searchPlaceholder="Search transport..."
+          emptyMessage="No transport found."
+          value={selectedValue}
+          onChange={onChange}
+        />
       </div>
-      
-      <div className='grid grid-cols-1 items-center justify-center'>
+
+      {/* Gauge & Messages */}
+      <div className="grid grid-cols-1 items-center justify-center mt-4">
         <GaugeComponent
           value={value}
           type="semicircle"
@@ -68,8 +76,16 @@ const DangerLevelGauge: React.FC<DangerLevelGaugeProps> = ({ value }) => {
           }}
         />
 
+        {/* Message List */}
+        <div className="mt-4 space-y-1 text-white text-sm sem">
+          {messages.map((msg, idx) => (
+            <div key={idx} className="flex items-start gap-2">
+              <span>•</span>
+              <span>{msg}</span>
+            </div>
+          ))}
+        </div>
       </div>
-      
     </>
   );
 };

@@ -1,3 +1,6 @@
+// this file is used to fetch data from google maps api and so if the user starts typing in the input field it will show the autocomplete suggestions meaning if c is typed it will show cities starting with c and so on. it returns all the cities with their coordinates and place id. this is used to show the autocomplete suggestions in the input field. it uses the google maps api to fetch the data and so it is important to have a valid api key in the .env file. it uses the google maps services js library to fetch the data and so it is important to have that installed in the project. it uses the place autocomplete method to fetch the data and so it is important to have that enabled in the google cloud console for the api key. it uses the place details method to fetch the details of each place and so it is important to have that enabled in the google cloud console for the api key. it uses async await to fetch the data and so it is important to have that enabled in the google cloud console for the api key. it uses promise.all to fetch all the places at once and so it is important to have that enabled in the google cloud console for the api key.
+
+
 "use server";
 
 import { Client } from "@googlemaps/google-maps-services-js";
