@@ -4,8 +4,8 @@
 import React from "react";
 
 interface WindDirectionCompassProps {
-  windSpeed: number; // e.g. 9 (km/h or m/s)
-  direction: number; // degrees from North (0-360)
+  windSpeed: number; 
+  direction: number; 
 }
 
 const directions = ["N", "E", "S", "W"];
