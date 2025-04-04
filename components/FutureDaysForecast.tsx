@@ -39,7 +39,7 @@ const FutureDaysForecast: React.FC<FutureDaysForecastProps> = ({ forecast }) => 
         <div className="w-4 h-7 flex items-center justify-center">
           <Image src='./calendar.svg' alt="weather icon" width={16} height={16} />
         </div>
-        <h2 className="w-40 text-white text-sm font-medium">10-DAY FORECAST</h2>
+        <h2 className="w-40  text-white/60 text-sm font-medium ">10-DAY FORECAST</h2>
       </div>
       
       {forecast.map((day, idx) => (

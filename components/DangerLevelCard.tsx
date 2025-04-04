@@ -25,7 +25,7 @@ const DangerLevelGauge: React.FC<DangerLevelGaugeProps> = ({
         <div className="w-4 h-7 flex items-center justify-center">
           <Image src="/exclamationmark.triangle.fill.svg" alt="danger icon" width={16} height={16} />
         </div>
-        <h2 className="w-40 text-white text-sm font-medium">DANGER LEVEL</h2>
+        <h2 className="w-40 text-white text-sm font-medium  text-white/60 ">DANGER LEVEL</h2>
       </div>
 
       {/* Combobox */}

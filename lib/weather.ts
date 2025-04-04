@@ -10,17 +10,12 @@ const HOURLY_FORECAST_BASE_URL = "https://pro.openweathermap.org/data/2.5/foreca
 const ONECALL_BASE_URL = "https://api.openweathermap.org/data/3.0/onecall";
 
 
-
-export async function getCurrentWeather(city: string) {
+export async function getCurrentWeather(lat: number, lon: number) {
   if (!API_KEY) {
     throw new Error("Missing OpenWeather API key");
   }
 
-  // Strip any text after the first comma
-  const cityOnly = city.split(",")[0].trim();
-  console.log("City Only:", cityOnly); // Debugging line
-
-  const url = `${BASE_URL}?q=${encodeURIComponent(cityOnly)}&units=metric&appid=${API_KEY}`;
+  const url = `${BASE_URL}?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`;
 
   const res = await fetch(url);
   if (!res.ok) {
@@ -31,7 +26,6 @@ export async function getCurrentWeather(city: string) {
 
   return {
     city: data.name,
-    // latitude and longitude
     lat: data.coord.lat,
     lon: data.coord.lon,
     temperature: data.main.temp,
@@ -42,7 +36,6 @@ export async function getCurrentWeather(city: string) {
     condition: data.weather[0].main,
     description: data.weather[0].description,
     icon: data.weather[0].icon,
-    // wind speed
     windSpeed: data.wind.speed,
     windGust: data.wind.gust,
     windDeg: data.wind.deg,
@@ -50,15 +43,12 @@ export async function getCurrentWeather(city: string) {
 }
 
 
-export async function getDailyForecast(city: string, days: number = 10) {
+export async function getDailyForecast(lat: number, lon: number, days: number = 10) {
   if (!API_KEY) {
     throw new Error("Missing OpenWeather API key");
   }
 
-  // Extract city only
-  const cityOnly = city.split(",")[0].trim();
-
-  const url = `${FORECAST_BASE_URL}?q=${encodeURIComponent(cityOnly)}&cnt=${days}&units=metric&appid=${API_KEY}`;
+  const url = `${FORECAST_BASE_URL}?lat=${lat}&lon=${lon}&cnt=${days}&units=metric&appid=${API_KEY}`;
 
   const res = await fetch(url);
   if (!res.ok) {
@@ -67,9 +57,8 @@ export async function getDailyForecast(city: string, days: number = 10) {
 
   const data = await res.json();
 
-  // Optional: format the forecast
   const formattedForecast = data.list.map((day: any) => ({
-    dt: day.dt, // timestamp
+    dt: day.dt,
     temperature: {
       min: day.temp.min,
       max: day.temp.max,
@@ -86,7 +75,11 @@ export async function getDailyForecast(city: string, days: number = 10) {
   };
 }
 
-export async function getHourlyForecast(city: string, hours: number = 23): Promise<{
+export async function getHourlyForecast(
+  lat: number,
+  lon: number,
+  hours: number = 23
+): Promise<{
   hourly: any[],
   sunrise: number,
   sunset: number,
@@ -94,8 +87,8 @@ export async function getHourlyForecast(city: string, hours: number = 23): Promi
 }> {
   if (!API_KEY) throw new Error("Missing OpenWeather API key");
 
-  const cityOnly = city.split(",")[0].trim();
-  const url = `${HOURLY_FORECAST_BASE_URL}?q=${encodeURIComponent(cityOnly)}&cnt=${hours}&units=metric&appid=${API_KEY}`;
+  const url = `${HOURLY_FORECAST_BASE_URL}?lat=${lat}&lon=${lon}&cnt=${hours}&units=metric&appid=${API_KEY}`;
+
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Failed to fetch hourly forecast: ${res.statusText}`);
 
@@ -113,7 +106,7 @@ export async function getHourlyForecast(city: string, hours: number = 23): Promi
   return {
     sunrise: data.city.sunrise,
     sunset: data.city.sunset,
-    timezoneOffset: data.city.timezone, // make sure this field exists
+    timezoneOffset: data.city.timezone,
     hourly: formattedHourly,
   };
 }

@@ -30,7 +30,7 @@ const WeatherCard: React.FC<WeatherCardProps> = ({
       </div>
 
       {/* Weather Description */}
-      <p className="text-lg xl:text-2xl text-white/80 mb-1">
+      <p className="text-lg xl:text-2xl text-white/60 mb-1">
         {capitalizeFirst(description)}
       </p>
 

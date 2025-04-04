@@ -69,10 +69,14 @@ const Page: React.FC = () => {
   
       try {
         const [weather, forecast, hourlyData, oneCallData] = await Promise.all([
-          getCurrentWeather(cityName),
-          getDailyForecast(cityName),
-          getHourlyForecast(cityName),
-          getOneCallData(selectedCity.lat, selectedCity.lng), // 🌍 new call here
+          // getCurrentWeather(cityName),
+          getCurrentWeather(selectedCity.lat, selectedCity.lng),
+          // getDailyForecast(cityName),
+          getDailyForecast(selectedCity.lat, selectedCity.lng),
+
+          // getHourlyForecast(cityName),
+          getHourlyForecast(selectedCity.lat, selectedCity.lng),
+          getOneCallData(selectedCity.lat, selectedCity.lng), 
         ]);
   
         setWeatherData(weather);
@@ -87,7 +91,7 @@ const Page: React.FC = () => {
         console.log("Wind Gust:", weather.windGust);
         console.log("Timezone Offset:", hourlyData?.timezoneOffset);
         console.log("City Coordinates:", selectedCity.lat, selectedCity.lng);
-        console.log("One Call API Data:", oneCallData); // 🔍 log result
+        console.log("One Call API Data:", oneCallData); 
         // print current rain data
         console.log("Current Rain Data:", oneCallData.current.rain);
       } catch (error) {

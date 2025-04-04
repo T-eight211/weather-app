@@ -115,7 +115,7 @@ const HourlyWeatherWidget: React.FC<Props> = ({
         <div className="w-4 h-7 flex items-center justify-center">
           <Image src="/degreesign.celsius.svg" alt="danger icon" width={16} height={16} />
         </div>
-        <h2 className="w-60 text-white text-sm font-medium">HOURLY TEMPERATURE</h2>
+        <h2 className="w-60  text-white/60  text-sm font-medium ">HOURLY TEMPERATURE</h2>
     </div>
 
     <div className="flex overflow-x-auto gap-8 py-2 scrollbar-thin scrollbar-thumb-white scrollbar-track-transparent  max-w-[80vw]">

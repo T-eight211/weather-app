@@ -33,7 +33,7 @@ const WindCard: React.FC<WindCardProps> = ({ windSpeed, windGust, windDeg }) => 
         <div className="w-4 h-7 flex items-center justify-center">
           <Image src='./wind.svg' alt="weather icon" width={16} height={16} />
         </div>
-        <h2 className="w-40 text-white text-sm font-medium">WIND</h2>
+        <h2 className="w-40  text-white/60  text-sm font-medium">WIND</h2>
       </div>
 
       <div className="flex items-center">
