@@ -1,45 +1,10 @@
-🌦️ Weather App (Next.js)
-This is a Next.js project bootstrapped with create-next-app.
+This is a [Next.js](https://nextjs.org) project bootstrapped with [create-next-app](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-🚀 Getting Started
-1. Clone the Repository
+## Getting Started
+
+First, run the development server:
+
 bash
-Copy
-Edit
-git clone https://github.com/your-username/weather-app.git
-cd weather-app
-🔗 Or access the live version at:
-https://weather-app-git-landing-page-t-eight211s-projects.vercel.app
-
-2. Install Dependencies
-bash
-Copy
-Edit
-npm install
-3. Set Up Environment Variables
-Create a .env.local file in the root directory (same level as package.json) and paste the following:
-
-env
-Copy
-Edit
-GOOGLE_API_KEY=AIzaSyB8KMKGOf2VwDGSeoTHWLzmIG407JCcVRA
-NEXT_PUBLIC_WEATHER_API_KEY=6f3fc0377e70753fbab151631f3aa247
-⚠️ Important Notes:
-OpenWeather One Call API 3.0
-Subscribe to the free tier here (1000 free calls/month):
-👉 https://openweathermap.org/api/one-call-3
-
-Google Maps APIs Required:
-
-Google Maps JavaScript API
-
-Places Autocomplete API
-👉 Get your key from the Google Cloud Console
-
-4. Run the Development Server
-bash
-Copy
-Edit
 npm run dev
 # or
 yarn dev
@@ -47,8 +12,9 @@ yarn dev
 pnpm dev
 # or
 bun dev
-Then open your browser and go to:
-http://localhost:3000 
+
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying app/page.tsx. The page auto-updates as you edit the file.
 
