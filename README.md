@@ -1,7 +1,3 @@
-Here's the updated **README.md** with your instructions clearly added, including project setup, environment variables, and deployment guidance:
-
----
-
 # Weather App 🌤️
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
@@ -94,4 +90,3 @@ This project uses **Conventional Commits**. Here's a summary:
 
 ---
 
-Let me know if you'd like this exported as a `.md` file!
