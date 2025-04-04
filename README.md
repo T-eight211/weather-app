@@ -25,7 +25,7 @@ npm install
 Create a `.env.local` file in the **root directory** (same level as `package.json`) and paste the following:
 
 ```env
-GOOGLE_API_KEY=AIzaSyB8KMKGOf2VwDGSeoTHWLzmIG407JCcVRA
+GOOGLE_API_KEY=
 NEXT_PUBLIC_WEATHER_API_KEY=6f3fc0377e70753fbab151631f3aa247
 ```
 
