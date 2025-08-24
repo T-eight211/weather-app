@@ -32,6 +32,7 @@ NEXT_PUBLIC_WEATHER_API_KEY=6f3fc0377e70753fbab151631f3aa247
 > ⚠️ **Important Notes:**
 >
 > - For OpenWeather One Call API 3.0, **you must subscribe** to the [free tier here](https://openweathermap.org/api/one-call-3) (1000 free calls/month).
+> - # the google maps api key is from this is from occasiondi d'oro website project from occasionidoroviavitruvio46@gmail.com google cloud console 
 > - For Google Maps functionality, enable:
 >   - Google Maps JavaScript API
 >   - Places Autocomplete API  
